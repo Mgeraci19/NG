@@ -31,8 +31,9 @@ public class Game extends JFrame implements KeyListener {
     Vector v;
     Vector a;
 
-    float friction = 0.998f;
-    float push;
+    float friction = .99f;
+    float pushX;
+    float pushY;
     int sz;
 
 
@@ -68,15 +69,17 @@ public class Game extends JFrame implements KeyListener {
         setFocusable(true);
 
         //set background window color
-        setBackground(Color.BLUE);
+        setBackground(Color.BLACK);
 
 
 
-        p = new Vector(0, 0);
-        v = new Vector (100, 100);
+        p = new Vector(50, 50);
+        v = new Vector (0, 0);
         a = new Vector (0,0);
-        push = 100;
-        sz=100;
+        pushX = 100;
+        pushY= 100;
+
+        sz=10;
     }
 
     /*
@@ -95,7 +98,7 @@ public class Game extends JFrame implements KeyListener {
             a= new Vector(0,0);
         }
 
-        if(p.y+ sz > HEIGHT|| p.y<0){
+        if(p.y+ sz > HEIGHT-14 || p.y<31){
            v.setY(v.y*-1) ;
            a= new Vector(0,0);
         }
@@ -120,36 +123,45 @@ public class Game extends JFrame implements KeyListener {
         g.clearRect(0,0,WIDTH, HEIGHT);
 
         g.setColor(Color.red);
-        g.fillRect(p.ix, p.iy, sz, sz);
+        g.fillRect(p.ix , p.iy, sz, sz);
+
+
+        g.setColor(Color.white);
+        g.fillRect(0, 0, WIDTH, 30);
+
+        g.setColor(Color.white);
+        g.fillRect(0, 686, WIDTH, 1080);
         //draw fps
         g.setColor(Color.GREEN);
         g.drawString(Long.toString(fps), 10, 40);
+
 
         //release resources, show the buffer
         g.dispose();
         strategy.show();
     }
+
+
     private void handleKeys(){
         for(int i =0; i <keys.size();i++){
             switch(keys.get(i)){
                 case KeyEvent.VK_UP:
-                    a.mult(push);
-                a = Vector.unit2D((float)Math.toRadians(-90));
-
+                    a = Vector.unit2D((float)Math.toRadians(-90));
+                    a.mult(pushY);
                     break;
                 case KeyEvent.VK_DOWN:
-                    a.mult(push);
                     a = Vector.unit2D((float)Math.toRadians(90));
+                    a.mult(pushY);
                    break;
 
                 case KeyEvent.VK_LEFT:
                     a = Vector.unit2D((float)Math.toRadians(180));
-                    a.mult(push);
+                    a.mult(pushX);
                     break;
 
                 case KeyEvent.VK_RIGHT:
                     a = Vector.unit2D((0));
-                    a.mult(push);
+                    a.mult(pushX);
                     break;
 
             }
@@ -217,7 +229,7 @@ for( int i = keys.size() -1; i>= 0; i--){
 
     //entry point for application
     public static void main(String[] args){
-        Game game = new Game(800, 600, 60);
+        Game game = new Game(1080, 700, 60);
         game.run();
     }
 
