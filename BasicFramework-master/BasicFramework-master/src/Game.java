@@ -30,12 +30,14 @@ public class Game extends JFrame implements KeyListener {
     Vector p;
     Vector p2;
     Vector v;
+
     Vector a;
+
 
     float friction = .99f;
     float pushX;
     float pushY;
-    int sz, cooldown=600, sz2;
+    int sz, cooldown=1200, sz2;
 
 
     public Game(int width, int height, int fps){
@@ -77,6 +79,7 @@ public class Game extends JFrame implements KeyListener {
         p = new Vector(50, 50);
         p2= new Vector(300, 300);
         v = new Vector (0, 0);
+
         a = new Vector (0,0);
         pushX = 100;
         pushY= 100;
@@ -93,8 +96,10 @@ public class Game extends JFrame implements KeyListener {
         //update current fps
         fps = (int)(1f/dt);
         handleKeys();
-        if(cooldown>0){
-            cooldown--;
+        if(cooldown>=12  && spacePressed==true){
+            cooldown-=12;
+        }else if(cooldown<1200 && spacePressed== false){
+            cooldown+=12;
         }
 
 
@@ -116,12 +121,16 @@ public class Game extends JFrame implements KeyListener {
            gameOver = true;
        }
 
+
         // v+= a *dt;
         // p += v* dt;
         v.add(Vector.mult(a,dt));
         v.mult(friction);
         p.add(Vector.mult(v,dt));
+
+        p2.add(Vector.mult(a,dt));
         accelerating = false;
+        spacePressed= false;
 
     }
 
@@ -142,8 +151,10 @@ public class Game extends JFrame implements KeyListener {
             g.setColor(Color.GREEN);
             g.fillRect(p.ix, p.iy, sz, sz);
 
+
             g.setColor(Color.YELLOW);
             g.fillRect(p2.ix, p2.iy, sz2, sz2);
+
 
 
             //Roof + Floor
@@ -177,12 +188,13 @@ public class Game extends JFrame implements KeyListener {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             g.setColor(Color.WHITE);
             g.drawString("Press Space to restart", 200, 550);
-
+            cooldown=1200;
         }
         g.dispose();
         strategy.show();
 
     }
+
 
 
     private void handleKeys(){
@@ -216,10 +228,10 @@ public class Game extends JFrame implements KeyListener {
                         break;
 
                         case KeyEvent.VK_SPACE:
-
+                            spacePressed= true;
                                 if(cooldown>0) {
                                     a.mult(5);
-                                    spacePressed = true;
+
                                 }
 
 
@@ -237,6 +249,7 @@ public class Game extends JFrame implements KeyListener {
                                 break;
                     }
             }
+
 
         }
     }
