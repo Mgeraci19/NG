@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Game extends JFrame implements KeyListener {
 
 
-
+    boolean gameOver = false, accelerating= false;
     //window vars
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
@@ -69,7 +69,7 @@ public class Game extends JFrame implements KeyListener {
         setFocusable(true);
 
         //set background window color
-        setBackground(Color.BLACK);
+        setBackground(Color.DARK_GRAY);
 
 
 
@@ -79,7 +79,7 @@ public class Game extends JFrame implements KeyListener {
         pushX = 100;
         pushY= 100;
 
-        sz=10;
+        sz=30;
     }
 
     /*
@@ -93,21 +93,23 @@ public class Game extends JFrame implements KeyListener {
 
 
 
-        if(p.x + sz > WIDTH|| p.x<0){
-           v.setX( v.x*-1);
-            a= new Vector(0,0);
+        if(p.x + sz > WIDTH-14|| p.x<17){
+          gameOver = true;
         }
 
         if(p.y+ sz > HEIGHT-14 || p.y<31){
-           v.setY(v.y*-1) ;
-           a= new Vector(0,0);
+          gameOver = true;
         }
-
+        if (!accelerating){
+            a = new Vector(0,0);
+        }
         // v+= a *dt;
         // p += v* dt;
         v.add(Vector.mult(a,dt));
         v.mult(friction);
         p.add(Vector.mult(v,dt));
+        accelerating = false;
+
     }
 
     /*
@@ -122,49 +124,90 @@ public class Game extends JFrame implements KeyListener {
         //clear screen
         g.clearRect(0,0,WIDTH, HEIGHT);
 
-        g.setColor(Color.red);
-        g.fillRect(p.ix , p.iy, sz, sz);
+
+        if (gameOver == false) {
+            g.setColor(Color.GREEN);
+            g.fillRect(p.ix, p.iy, sz, sz);
+
+            //Roof + Floor
+            g.setColor(Color.YELLOW);
+            g.fillRect(0, 0, WIDTH, 34);
+
+            g.setColor(Color.YELLOW);
+            g.fillRect(0, 686, WIDTH, 1080);
+            // Walls
+            g.setColor(Color.YELLOW);
+            g.fillRect(0, 0, 16, HEIGHT);
+
+            g.setColor(Color.YELLOW);
+            g.fillRect(1066, 0, 1080, HEIGHT);
 
 
-        g.setColor(Color.white);
-        g.fillRect(0, 0, WIDTH, 30);
+            //draw fps
+            g.setColor(Color.GREEN);
+            g.drawString(Long.toString(fps), 10, 40);
+            //release resources, show the buffer
 
-        g.setColor(Color.white);
-        g.fillRect(0, 686, WIDTH, 1080);
-        //draw fps
-        g.setColor(Color.GREEN);
-        g.drawString(Long.toString(fps), 10, 40);
+        } else{
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
+            g.setColor(Color.RED);
 
+            g.drawString("Game Over", 200, 350);
 
-        //release resources, show the buffer
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+            g.setColor(Color.WHITE);
+            g.drawString("Press Space to restart", 200, 550);
+
+        }
         g.dispose();
         strategy.show();
+
     }
 
 
     private void handleKeys(){
         for(int i =0; i <keys.size();i++){
-            switch(keys.get(i)){
-                case KeyEvent.VK_UP:
-                    a = Vector.unit2D((float)Math.toRadians(-90));
-                    a.mult(pushY);
-                    break;
-                case KeyEvent.VK_DOWN:
-                    a = Vector.unit2D((float)Math.toRadians(90));
-                    a.mult(pushY);
-                   break;
 
-                case KeyEvent.VK_LEFT:
-                    a = Vector.unit2D((float)Math.toRadians(180));
-                    a.mult(pushX);
-                    break;
+                if (!gameOver) {
 
-                case KeyEvent.VK_RIGHT:
-                    a = Vector.unit2D((0));
-                    a.mult(pushX);
-                    break;
+                    switch(keys.get(i)){
+                    case KeyEvent.VK_UP:
+                        a = Vector.unit2D((float) Math.toRadians(-90));
+                        a.mult(pushY);
+                        accelerating = true;
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        a = Vector.unit2D((float) Math.toRadians(90));
+                        a.mult(pushY);
 
+                        accelerating = true;
+                        break;
+
+                    case KeyEvent.VK_LEFT:
+                        a = Vector.unit2D((float) Math.toRadians(180));
+                        a.mult(pushX);
+                        accelerating = true;
+                        break;
+
+                    case KeyEvent.VK_RIGHT:
+                        a = Vector.unit2D((0));
+                        a.mult(pushX);
+                        accelerating = true;
+                        break;
+                }
+                }else{
+                        switch(keys.get(i)){
+                            case KeyEvent.VK_SPACE:
+                                p = new Vector(50, 50);
+                              gameOver= false;
+                                a = new Vector(0,0);
+                                v = new Vector(0,0);
+                                break;
+                    }
             }
+
         }
     }
 
@@ -202,6 +245,7 @@ for( int i = keys.size() -1; i>= 0; i--){
         init();
 
         while(isRunning){
+
 
             //new loop, clock the start
             startFrame = System.currentTimeMillis();
