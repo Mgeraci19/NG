@@ -31,7 +31,7 @@ public class Game extends JFrame implements KeyListener {
     Vector p2;
     Vector v;
 
-    Vector a;
+    Vector a, a2;
 
 
     float friction = .99f;
@@ -81,6 +81,7 @@ public class Game extends JFrame implements KeyListener {
         v = new Vector (0, 0);
 
         a = new Vector (0,0);
+        a2 = new Vector (100,100);
         pushX = 100;
         pushY= 100;
 
@@ -102,7 +103,7 @@ public class Game extends JFrame implements KeyListener {
             cooldown+=12;
         }
 
-
+        // makes player lose if they touch the wall
         if(p.x + sz > WIDTH-14|| p.x<17){
           gameOver = true;
         }
@@ -110,6 +111,18 @@ public class Game extends JFrame implements KeyListener {
         if(p.y+ sz > HEIGHT-14 || p.y<31){
           gameOver = true;
         }
+
+
+        // makes block bounce off walls
+        if(p2.x + sz > WIDTH-14|| p.x<17){
+           
+        }
+
+        if(p2.y+ sz > HEIGHT-14 || p.y<31) {
+
+        }
+
+      //makes acceleration stop if space isnt pressed
         if (!accelerating){
             a = new Vector(0,0);
         }
@@ -128,7 +141,7 @@ public class Game extends JFrame implements KeyListener {
         v.mult(friction);
         p.add(Vector.mult(v,dt));
 
-        p2.add(Vector.mult(a,dt));
+        p2.add(Vector.mult(a2,dt));
         accelerating = false;
         spacePressed= false;
 
@@ -243,6 +256,7 @@ public class Game extends JFrame implements KeyListener {
                         switch(keys.get(i)){
                             case KeyEvent.VK_SPACE:
                                 p = new Vector(50, 50);
+                                p2 = new Vector(300, 300);
                               gameOver= false;
                                 a = new Vector(0,0);
                                 v = new Vector(0,0);
