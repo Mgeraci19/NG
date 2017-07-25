@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Game extends JFrame implements KeyListener {
 
 
-    boolean gameOver = false, accelerating= false;
+    boolean gameOver = false, accelerating= false, spacePressed;
     //window vars
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
@@ -28,13 +28,14 @@ public class Game extends JFrame implements KeyListener {
     private int fps; //current fps
 
     Vector p;
+    Vector p2;
     Vector v;
     Vector a;
 
     float friction = .99f;
     float pushX;
     float pushY;
-    int sz;
+    int sz, cooldown=600, sz2;
 
 
     public Game(int width, int height, int fps){
@@ -74,12 +75,14 @@ public class Game extends JFrame implements KeyListener {
 
 
         p = new Vector(50, 50);
+        p2= new Vector(300, 300);
         v = new Vector (0, 0);
         a = new Vector (0,0);
         pushX = 100;
         pushY= 100;
 
         sz=30;
+        sz2=30;
     }
 
     /*
@@ -90,7 +93,9 @@ public class Game extends JFrame implements KeyListener {
         //update current fps
         fps = (int)(1f/dt);
         handleKeys();
-
+        if(cooldown>0){
+            cooldown--;
+        }
 
 
         if(p.x + sz > WIDTH-14|| p.x<17){
@@ -103,6 +108,14 @@ public class Game extends JFrame implements KeyListener {
         if (!accelerating){
             a = new Vector(0,0);
         }
+
+        if(     p.x<p2.x+sz2 &&
+               p.x+sz>p2.x &&
+                p.y<p2.y+sz2&&
+                p.y + sz >p2.y){
+           gameOver = true;
+       }
+
         // v+= a *dt;
         // p += v* dt;
         v.add(Vector.mult(a,dt));
@@ -129,6 +142,10 @@ public class Game extends JFrame implements KeyListener {
             g.setColor(Color.GREEN);
             g.fillRect(p.ix, p.iy, sz, sz);
 
+            g.setColor(Color.YELLOW);
+            g.fillRect(p2.ix, p2.iy, sz2, sz2);
+
+
             //Roof + Floor
             g.setColor(Color.YELLOW);
             g.fillRect(0, 0, WIDTH, 34);
@@ -146,6 +163,7 @@ public class Game extends JFrame implements KeyListener {
             //draw fps
             g.setColor(Color.GREEN);
             g.drawString(Long.toString(fps), 10, 40);
+            g.drawString(Long.toString(cooldown), 100, 40);
             //release resources, show the buffer
 
         } else{
@@ -191,11 +209,23 @@ public class Game extends JFrame implements KeyListener {
                         accelerating = true;
                         break;
 
-                    case KeyEvent.VK_RIGHT:
+                    case KeyEvent.VK_RIGHT  :
                         a = Vector.unit2D((0));
                         a.mult(pushX);
                         accelerating = true;
                         break;
+
+                        case KeyEvent.VK_SPACE:
+
+                                if(cooldown>0) {
+                                    a.mult(5);
+                                    spacePressed = true;
+                                }
+
+
+
+                            break;
+
                 }
                 }else{
                         switch(keys.get(i)){
