@@ -27,17 +27,15 @@ public class Game extends JFrame implements KeyListener {
     private long startFrame; //time since start of frame
     private int fps; //current fps
 
-    Vector p;
-    Vector p2;
-    Vector v;
+    Vector p,a, a2, p2,v,v2;
 
-    Vector a, a2;
+    float friction , push;
 
+    final float T =0.25f;
 
-    float friction = .99f;
-    float pushX;
-    float pushY;
-    int sz, cooldown=1200, sz2;
+    int sz, cooldown, sz2;
+
+    int randomNum=1;
 
 
     public Game(int width, int height, int fps){
@@ -79,69 +77,87 @@ public class Game extends JFrame implements KeyListener {
         p = new Vector(50, 50);
         p2= new Vector(300, 300);
         v = new Vector (0, 0);
+        v2 = new Vector(0, 0);
 
+        friction = .99f;
         a = new Vector (0,0);
-        a2 = new Vector (100,100);
-        pushX = 100;
-        pushY= 100;
-
+        a2 = new Vector (1,1);
+        push= 100;
+        cooldown = 1200;
         sz=30;
         sz2=30;
+
+        randomNum = (int)(Math.random()-.5 +10);
     }
 
     /*
      * update()
      * updates all relevant game variables before the frame draws
      */
-    private void update(){
-        //update current fps
-        fps = (int)(1f/dt);
-        handleKeys();
+    private  void setCooldown(){
         if(cooldown>=12  && spacePressed==true){
             cooldown-=12;
         }else if(cooldown<1200 && spacePressed== false){
             cooldown+=12;
         }
+    }
 
+    private void wallCollision(){
         // makes player lose if they touch the wall
         if(p.x + sz > WIDTH-14|| p.x<17){
-          gameOver = true;
+            gameOver = true;
         }
 
         if(p.y+ sz > HEIGHT-14 || p.y<31){
-          gameOver = true;
+            gameOver = true;
         }
 
 
-        // makes block bounce off walls
+
+        // makes block bounce off walls  TODO
         if(p2.x + sz > WIDTH-14|| p.x<17){
-           
+            v2.setX( v2.x* -1);
+            //a2= new Vector(0,0);
         }
 
         if(p2.y+ sz > HEIGHT-14 || p.y<31) {
 
+            v2.setY(v2.y* -1);
+           // a2= new Vector(0,0);
         }
+    }
 
-      //makes acceleration stop if space isnt pressed
+    private void blockCollision(){
+        if(     p.x<p2.x+sz2 &&
+                p.x+sz>p2.x &&
+                p.y<p2.y+sz2&&
+                p.y + sz >p2.y)
+            gameOver = true;
+    }
+    private void update(){
+        //update current fps
+        fps = (int)(1f/dt);
+
+        handleKeys();
+        setCooldown();
+        wallCollision();
+        blockCollision();
+        //makes acceleration stop if space isnt pressed
         if (!accelerating){
             a = new Vector(0,0);
         }
 
-        if(     p.x<p2.x+sz2 &&
-               p.x+sz>p2.x &&
-                p.y<p2.y+sz2&&
-                p.y + sz >p2.y){
-           gameOver = true;
-       }
-
-
         // v+= a *dt;
         // p += v* dt;
         v.add(Vector.mult(a,dt));
+      
+        p2.add(Vector.mult(v2,dt));
         v.mult(friction);
         p.add(Vector.mult(v,dt));
+        p2.add(Vector.mult(v2,dt));
+        //following ai
+        //v2 = Vector.sub(p2,Vector.add(p,Vector.mult(v,T)));
 
-        p2.add(Vector.mult(a2,dt));
         accelerating = false;
         spacePressed= false;
 
@@ -216,27 +232,28 @@ public class Game extends JFrame implements KeyListener {
                 if (!gameOver) {
 
                     switch(keys.get(i)){
-                    case KeyEvent.VK_UP:
+
+                        case KeyEvent.VK_UP:
                         a = Vector.unit2D((float) Math.toRadians(-90));
-                        a.mult(pushY);
+                        a.mult(push);
                         accelerating = true;
                         break;
                     case KeyEvent.VK_DOWN:
                         a = Vector.unit2D((float) Math.toRadians(90));
-                        a.mult(pushY);
+                        a.mult(push);
 
                         accelerating = true;
                         break;
 
                     case KeyEvent.VK_LEFT:
                         a = Vector.unit2D((float) Math.toRadians(180));
-                        a.mult(pushX);
+                        a.mult(push);
                         accelerating = true;
                         break;
 
                     case KeyEvent.VK_RIGHT  :
                         a = Vector.unit2D((0));
-                        a.mult(pushX);
+                        a.mult(push);
                         accelerating = true;
                         break;
 
