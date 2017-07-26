@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Game extends JFrame implements KeyListener {
 
 
-    boolean gameOver = false, accelerating= false, spacePressed;
+    boolean gameOver = false, accelerating= false, spacePressed, wallHit= false;
     //window vars
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
@@ -35,7 +35,7 @@ public class Game extends JFrame implements KeyListener {
 
     int sz, cooldown, sz2;
 
-    int randomNum=1;
+    int randomNum=1, randomNum2 = 1;
 
 
     public Game(int width, int height, int fps){
@@ -85,9 +85,9 @@ public class Game extends JFrame implements KeyListener {
         push= 100;
         cooldown = 1200;
         sz=30;
-        sz2=30;
+        sz2=50;
 
-        randomNum = (int)(Math.random()-.5 +10);
+
     }
 
     /*
@@ -114,16 +114,19 @@ public class Game extends JFrame implements KeyListener {
 
 
 
-        // makes block bounce off walls  TODO
-        if(p2.x + sz > WIDTH-14|| p.x<17){
+        // makes block bounce off walls
+        if(p2.x + sz2 > WIDTH-14|| p2.x<17){
             v2.setX( v2.x* -1);
-            //a2= new Vector(0,0);
+            a2.setX( a2.x* -1);
+            a2= new Vector(0,0);
+            wallHit = true;
         }
 
-        if(p2.y+ sz > HEIGHT-14 || p.y<31) {
+        if(p2.y+ sz2 > HEIGHT-14 || p2.y<31) {
 
             v2.setY(v2.y* -1);
-           // a2= new Vector(0,0);
+           a2= new Vector(0,0);
+            wallHit = true;
         }
     }
 
@@ -137,7 +140,8 @@ public class Game extends JFrame implements KeyListener {
     private void update(){
         //update current fps
         fps = (int)(1f/dt);
-
+        randomNum = (int)(Math.random()-.5 +10);
+        randomNum2 = (int)(Math.random() *360);
         handleKeys();
         setCooldown();
         wallCollision();
@@ -146,13 +150,16 @@ public class Game extends JFrame implements KeyListener {
         if (!accelerating){
             a = new Vector(0,0);
         }
-
+        a2 = Vector.unit2D((float) Math.toRadians(randomNum*randomNum2));
+        a2.mult(push*15);
         // v+= a *dt;
         // p += v* dt;
         v.add(Vector.mult(a,dt));
-      
+        v2.add(Vector.mult(a2,dt));
+
         p2.add(Vector.mult(v2,dt));
         v.mult(friction);
+        v2.mult(friction);
         p.add(Vector.mult(v,dt));
         p2.add(Vector.mult(v2,dt));
         //following ai
@@ -216,7 +223,7 @@ public class Game extends JFrame implements KeyListener {
 
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             g.setColor(Color.WHITE);
-            g.drawString("Press Space to restart", 200, 550);
+            g.drawString("Press R to restart", 200, 550);
             cooldown=1200;
         }
         g.dispose();
@@ -230,6 +237,9 @@ public class Game extends JFrame implements KeyListener {
         for(int i =0; i <keys.size();i++){
 
                 if (!gameOver) {
+
+
+
 
                     switch(keys.get(i)){
 
@@ -271,7 +281,7 @@ public class Game extends JFrame implements KeyListener {
                 }
                 }else{
                         switch(keys.get(i)){
-                            case KeyEvent.VK_SPACE:
+                            case KeyEvent.VK_R:
                                 p = new Vector(50, 50);
                                 p2 = new Vector(300, 300);
                               gameOver= false;
