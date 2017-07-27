@@ -31,8 +31,6 @@ public class Game extends JFrame implements KeyListener {
 
     float friction , push;
 
-    final float T =0.25f;
-
     int sz, cooldown, sz2,sz3,sz4;
 
     int randomNum=1, randomNum2 = 1,points=0, randomNum3= 1,randomNum4=1;
@@ -123,7 +121,7 @@ public class Game extends JFrame implements KeyListener {
             a = new Vector(0,0);
         }
         a2 = Vector.unit2D((float) Math.toRadians(randomNum*randomNum2));
-        a2.mult(push*15);
+        a2.mult(push*5) ;
         // v+= a *dt;
         // p += v* dt;
         v.add(Vector.mult(a,dt));
@@ -210,11 +208,21 @@ public class Game extends JFrame implements KeyListener {
         //checks if yellow block collides with white block
         if(checkCollision(p2.x,p3.x,p2.y,p3.y,sz2,sz3)){
             v2.setY(v2.y * -1);
+            v2.setX(v2.x * -1);
             a2 = new Vector(0, 0);
+        }
+        // fly + red
+        if(checkCollision(p4.x,p2.x,p4.y,p2.y,sz4,sz2)){
+            v2.setY(v2.y * -1);
+            v2.setX(v2.x * -1);
+            a2 = new Vector(0, 0);
+
+            System.out.println("H");
         }
 
         if(checkCollision(p2.x,p4.x,p2.y,p4.y,sz2,sz4)){
             v2.setY(v2.y * -1);
+            v2.setX(v2.x* -1);
             a2 = new Vector(0, 0);
         }
 
@@ -224,10 +232,15 @@ public class Game extends JFrame implements KeyListener {
             movePoints();
         }
 
+        if(checkCollision(p4.x,p3.x,p4.y,p3.y,sz4,sz3)){
+           System.out.println("w");
+        }
 
 
 
-}
+
+
+    }
 
 private boolean checkCollision(float x , float x2, float y,float y2, int sz, int sz2) {
 
