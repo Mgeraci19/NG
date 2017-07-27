@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
-
+//TODO x collision on random + white doesnt work and red following ai and block can still get stuck in walls
 public class Game extends JFrame implements KeyListener {
 
 
@@ -27,13 +27,13 @@ public class Game extends JFrame implements KeyListener {
     private long startFrame; //time since start of frame
     private int fps; //current fps
 
-    Vector p,a, a2, p2,v,v2, p3,p5;
+    Vector p,a, a2, p2,v,v2,v4,a4, p3,p4;
 
     float friction , push;
 
     final float T =0.25f;
 
-    int sz, cooldown, sz2,sz3, sz5;
+    int sz, cooldown, sz2,sz3,sz4;
 
     int randomNum=1, randomNum2 = 1,points=0, randomNum3= 1,randomNum4=1;
 
@@ -77,22 +77,27 @@ public class Game extends JFrame implements KeyListener {
         p = new Vector(50, 50);
         p2= new Vector(800, 600);
         p3= new Vector(300, 300);
-        p5 = new Vector (1800,0);
+        p4= new Vector(100, 600);
+
+
         v = new Vector (0, 0);
         v2 = new Vector(0, 0);
+        v4 = new Vector (10,10);
 
 
 
         friction = .99f;
         a = new Vector (0,0);
         a2 = new Vector (1,1);
+        a4 = new Vector (10,10);
 
         push= 100;
         cooldown = 1200;
         sz=30;
-        sz2=50;
+        sz2=15;
         sz3 = 20;
-        sz5 = 400;
+        sz4 = 70;
+
 
 
     }
@@ -108,7 +113,6 @@ public class Game extends JFrame implements KeyListener {
         randomNum2 = (int)(Math.random() *360);
         randomNum3= (int)(Math.random()*900+ 30);
         randomNum4= (int)(Math.random()*600+30);
-        p5.ix --;
 
         handleKeys();
         setCooldown();
@@ -126,19 +130,23 @@ public class Game extends JFrame implements KeyListener {
         v2.add(Vector.mult(a2,dt));
 
         p2.add(Vector.mult(v2,dt));
+
         v.mult(friction);
         v2.mult(friction);
+
+
+
         p.add(Vector.mult(v,dt));
         p2.add(Vector.mult(v2,dt));
 
 
         //following ai
-        /*v4 = Vector.sub(p3,Vector.add(p,Vector.mult(v,T)));
 
-        v4.setMag(push);
-        v4= Vector.sub(p3,p);
-        v4.setMag(push);
-*/
+        v4= Vector.sub(p,p4);
+        v4.setMag(100);
+        v4.add(Vector.mult(a,dt));
+        p4.add(Vector.mult(v4,dt));
+
 
         accelerating = false;
         spacePressed= false;
@@ -190,45 +198,47 @@ public class Game extends JFrame implements KeyListener {
     }
 
     private void blockCollision(){
-        if(     p.x<p2.x+sz2 &&
-                p.x+sz>p2.x &&
-                p.y<p2.y+sz2&&
-                p.y + sz >p2.y)
-            gameOver = true;
 
-
-       if(     p2.x<p3.x+sz3 &&
-    p2.x+sz>p3.x &&
-    p2.y<p3.y+sz3&&
-    p2.y + sz2 >p3.y) {
-           v2.setY(v2.y * -1);
-           a2 = new Vector(0, 0);
+        //checks if player collides with yellow block
+        if(checkCollision(p.x,p2.x,p.y,p2.y,sz,sz2)){
+           gameOver = true;
        }
 
-        if(     p.x<p3.x+sz3 &&
-                p.x+sz>p3.x &&
-                p.y<p3.y+sz3&&
-                p.y + sz >p3.y) {
-           points++;
-           movePoints();
-
+        if(checkCollision(p.x,p4.x,p.y,p4.y,sz,sz4)){
+            gameOver = true;
+        }
+        //checks if yellow block collides with white block
+        if(checkCollision(p2.x,p3.x,p2.y,p3.y,sz2,sz3)){
+            v2.setY(v2.y * -1);
+            a2 = new Vector(0, 0);
         }
 
-        if(     p.x<p5.x+10 &&
-                p.x+sz>p5.x &&
-                p.y<p5.y+sz5&&
-                p.y + sz >p5.y) {
-           System.out.println("W");
-
+        if(checkCollision(p2.x,p4.x,p2.y,p4.y,sz2,sz4)){
+            v2.setY(v2.y * -1);
+            a2 = new Vector(0, 0);
         }
+
+        // checks if white and yellow blocks collide
+        if(checkCollision(p.x,p3.x,p.y,p3.y,sz,sz3)){
+            points++;
+            movePoints();
+        }
+
+
+
+
 }
 
-private boolean checkCollision(int x , int x2, int y,int y2, int sz, int sz2){
+private boolean checkCollision(float x , float x2, float y,float y2, int sz, int sz2) {
 
-    if(     x<x2+sz2 &&
-            p.x+sz>p2.x &&
-            p.y<p2.y+sz2&&
-            p.y + sz >p2.y)
+    if (x < x2 + sz2 &&
+            x+ sz > x2 &&
+            y < y2+ sz2 &&
+            y + sz > y2) {
+return true;
+    }else{
+        return false;
+    }
 
 
 }
@@ -247,18 +257,21 @@ private boolean checkCollision(int x , int x2, int y,int y2, int sz, int sz2){
 
 
         if (!gameOver) {
+           //player
             g.setColor(Color.GREEN);
             g.fillRect(p.ix, p.iy, sz, sz);
 
-
-            g.setColor(Color.YELLOW);
+            //random
+            g.setColor(Color.BLACK);
             g.fillRect(p2.ix, p2.iy, sz2, sz2);
 
-            g.setColor(Color.RED);
-            g.fillRect(p5.ix, p5.iy, 10, sz5);
-
+            //points
             g.setColor(Color.WHITE);
             g.fillRect(p3.ix, p3.iy, sz3, sz3);
+
+            //tracking
+            g.setColor(Color.RED);
+            g.fillRect(p4.ix, p4.iy, sz4, sz4);
 
 
             //Roof + Floor
@@ -306,6 +319,7 @@ private boolean checkCollision(int x , int x2, int y,int y2, int sz, int sz2){
         p3 = new Vector(300,300);
         p2= new Vector (600,600);
         p = new Vector(50, 50);
+        p4= new Vector(100, 600);
 
         a = new Vector(0,0);
         v = new Vector(0,0);
