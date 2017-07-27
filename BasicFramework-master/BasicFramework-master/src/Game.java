@@ -27,13 +27,13 @@ public class Game extends JFrame implements KeyListener {
     private long startFrame; //time since start of frame
     private int fps; //current fps
 
-    Vector p,a, a2, p2,v,v2, p3;
+    Vector p,a, a2, p2,v,v2, p3,p5;
 
     float friction , push;
 
     final float T =0.25f;
 
-    int sz, cooldown, sz2,sz3;
+    int sz, cooldown, sz2,sz3, sz5;
 
     int randomNum=1, randomNum2 = 1,points=0, randomNum3= 1,randomNum4=1;
 
@@ -77,6 +77,7 @@ public class Game extends JFrame implements KeyListener {
         p = new Vector(50, 50);
         p2= new Vector(800, 600);
         p3= new Vector(300, 300);
+        p5 = new Vector (1800,0);
         v = new Vector (0, 0);
         v2 = new Vector(0, 0);
 
@@ -91,6 +92,7 @@ public class Game extends JFrame implements KeyListener {
         sz=30;
         sz2=50;
         sz3 = 20;
+        sz5 = 400;
 
 
     }
@@ -106,6 +108,8 @@ public class Game extends JFrame implements KeyListener {
         randomNum2 = (int)(Math.random() *360);
         randomNum3= (int)(Math.random()*900+ 30);
         randomNum4= (int)(Math.random()*600+30);
+        p5.ix --;
+
         handleKeys();
         setCooldown();
         wallCollision();
@@ -126,6 +130,8 @@ public class Game extends JFrame implements KeyListener {
         v2.mult(friction);
         p.add(Vector.mult(v,dt));
         p2.add(Vector.mult(v2,dt));
+
+
         //following ai
         /*v4 = Vector.sub(p3,Vector.add(p,Vector.mult(v,T)));
 
@@ -148,13 +154,17 @@ public class Game extends JFrame implements KeyListener {
     }
 
     private void wallCollision(){
-        // makes player lose if they touch the wall
-        if(p.x + sz > WIDTH-14|| p.x<17){
-            gameOver = true;
+        // makes player bounce if they touch the wall
+        if(p.x + sz > WIDTH-14||  p.x<17){
+            v.setX( v.x* -1);
+            a.setX( a .x* -1);
+            a= new Vector(0,0);
         }
 
         if(p.y+ sz > HEIGHT-14 || p.y<31){
-            gameOver = true;
+            v.setY(v.y* -1);
+            a.setY( a.y* -1);
+            a= new Vector(0,0);
         }
 
 
@@ -203,6 +213,24 @@ public class Game extends JFrame implements KeyListener {
            movePoints();
 
         }
+
+        if(     p.x<p5.x+10 &&
+                p.x+sz>p5.x &&
+                p.y<p5.y+sz5&&
+                p.y + sz >p5.y) {
+           System.out.println("W");
+
+        }
+}
+
+private boolean checkCollision(int x , int x2, int y,int y2, int sz, int sz2){
+
+    if(     x<x2+sz2 &&
+            p.x+sz>p2.x &&
+            p.y<p2.y+sz2&&
+            p.y + sz >p2.y)
+
+
 }
 
     /*
@@ -226,6 +254,9 @@ public class Game extends JFrame implements KeyListener {
             g.setColor(Color.YELLOW);
             g.fillRect(p2.ix, p2.iy, sz2, sz2);
 
+            g.setColor(Color.RED);
+            g.fillRect(p5.ix, p5.iy, 10, sz5);
+
             g.setColor(Color.WHITE);
             g.fillRect(p3.ix, p3.iy, sz3, sz3);
 
@@ -247,8 +278,8 @@ public class Game extends JFrame implements KeyListener {
             //draw fps
             g.setColor(Color.GREEN);
             g.drawString(Long.toString(fps), 10, 40);
-            g.drawString(Long.toString(cooldown), 540, 40);
-            g.drawString(Long.toString(points), 900 , 40);
+            g.drawString(Long.toString(cooldown), 540, 50);
+            g.drawString(Long.toString(points), 900 , 50);
             //release resources, show the buffer
 
         } else{
