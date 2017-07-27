@@ -27,15 +27,15 @@ public class Game extends JFrame implements KeyListener {
     private long startFrame; //time since start of frame
     private int fps; //current fps
 
-    Vector p,a, a2, p2,v,v2;
+    Vector p,a, a2, p2,v,v2, p3;
 
     float friction , push;
 
     final float T =0.25f;
 
-    int sz, cooldown, sz2;
+    int sz, cooldown, sz2,sz3;
 
-    int randomNum=1, randomNum2 = 1;
+    int randomNum=1, randomNum2 = 1,points=0, randomNum3= 1,randomNum4=1;
 
 
     public Game(int width, int height, int fps){
@@ -75,17 +75,22 @@ public class Game extends JFrame implements KeyListener {
 
 
         p = new Vector(50, 50);
-        p2= new Vector(300, 300);
+        p2= new Vector(800, 600);
+        p3= new Vector(300, 300);
         v = new Vector (0, 0);
         v2 = new Vector(0, 0);
+
+
 
         friction = .99f;
         a = new Vector (0,0);
         a2 = new Vector (1,1);
+
         push= 100;
         cooldown = 1200;
         sz=30;
         sz2=50;
+        sz3 = 20;
 
 
     }
@@ -94,6 +99,46 @@ public class Game extends JFrame implements KeyListener {
      * update()
      * updates all relevant game variables before the frame draws
      */
+    private void update(){
+        //update current fps
+        fps = (int)(1f/dt);
+        randomNum = (int)(Math.random()-.5 +10);
+        randomNum2 = (int)(Math.random() *360);
+        randomNum3= (int)(Math.random()*900+ 30);
+        randomNum4= (int)(Math.random()*600+30);
+        handleKeys();
+        setCooldown();
+        wallCollision();
+        blockCollision();
+        //makes acceleration stop if space isnt pressed
+        if (!accelerating){
+            a = new Vector(0,0);
+        }
+        a2 = Vector.unit2D((float) Math.toRadians(randomNum*randomNum2));
+        a2.mult(push*15);
+        // v+= a *dt;
+        // p += v* dt;
+        v.add(Vector.mult(a,dt));
+        v2.add(Vector.mult(a2,dt));
+
+        p2.add(Vector.mult(v2,dt));
+        v.mult(friction);
+        v2.mult(friction);
+        p.add(Vector.mult(v,dt));
+        p2.add(Vector.mult(v2,dt));
+        //following ai
+        /*v4 = Vector.sub(p3,Vector.add(p,Vector.mult(v,T)));
+
+        v4.setMag(push);
+        v4= Vector.sub(p3,p);
+        v4.setMag(push);
+*/
+
+        accelerating = false;
+        spacePressed= false;
+
+    }
+
     private  void setCooldown(){
         if(cooldown>=12  && spacePressed==true){
             cooldown-=12;
@@ -130,45 +175,35 @@ public class Game extends JFrame implements KeyListener {
         }
     }
 
+    private void movePoints(){
+        p3 = new Vector (randomNum3, randomNum4);
+    }
+
     private void blockCollision(){
         if(     p.x<p2.x+sz2 &&
                 p.x+sz>p2.x &&
                 p.y<p2.y+sz2&&
                 p.y + sz >p2.y)
             gameOver = true;
-    }
-    private void update(){
-        //update current fps
-        fps = (int)(1f/dt);
-        randomNum = (int)(Math.random()-.5 +10);
-        randomNum2 = (int)(Math.random() *360);
-        handleKeys();
-        setCooldown();
-        wallCollision();
-        blockCollision();
-        //makes acceleration stop if space isnt pressed
-        if (!accelerating){
-            a = new Vector(0,0);
+
+
+       if(     p2.x<p3.x+sz3 &&
+    p2.x+sz>p3.x &&
+    p2.y<p3.y+sz3&&
+    p2.y + sz2 >p3.y) {
+           v2.setY(v2.y * -1);
+           a2 = new Vector(0, 0);
+       }
+
+        if(     p.x<p3.x+sz3 &&
+                p.x+sz>p3.x &&
+                p.y<p3.y+sz3&&
+                p.y + sz >p3.y) {
+           points++;
+           movePoints();
+
         }
-        a2 = Vector.unit2D((float) Math.toRadians(randomNum*randomNum2));
-        a2.mult(push*15);
-        // v+= a *dt;
-        // p += v* dt;
-        v.add(Vector.mult(a,dt));
-        v2.add(Vector.mult(a2,dt));
-
-        p2.add(Vector.mult(v2,dt));
-        v.mult(friction);
-        v2.mult(friction);
-        p.add(Vector.mult(v,dt));
-        p2.add(Vector.mult(v2,dt));
-        //following ai
-        //v2 = Vector.sub(p2,Vector.add(p,Vector.mult(v,T)));
-
-        accelerating = false;
-        spacePressed= false;
-
-    }
+}
 
     /*
      * draw()
@@ -183,7 +218,7 @@ public class Game extends JFrame implements KeyListener {
         g.clearRect(0,0,WIDTH, HEIGHT);
 
 
-        if (gameOver == false) {
+        if (!gameOver) {
             g.setColor(Color.GREEN);
             g.fillRect(p.ix, p.iy, sz, sz);
 
@@ -191,6 +226,8 @@ public class Game extends JFrame implements KeyListener {
             g.setColor(Color.YELLOW);
             g.fillRect(p2.ix, p2.iy, sz2, sz2);
 
+            g.setColor(Color.WHITE);
+            g.fillRect(p3.ix, p3.iy, sz3, sz3);
 
 
             //Roof + Floor
@@ -210,7 +247,8 @@ public class Game extends JFrame implements KeyListener {
             //draw fps
             g.setColor(Color.GREEN);
             g.drawString(Long.toString(fps), 10, 40);
-            g.drawString(Long.toString(cooldown), 100, 40);
+            g.drawString(Long.toString(cooldown), 540, 40);
+            g.drawString(Long.toString(points), 900 , 40);
             //release resources, show the buffer
 
         } else{
@@ -224,13 +262,24 @@ public class Game extends JFrame implements KeyListener {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             g.setColor(Color.WHITE);
             g.drawString("Press R to restart", 200, 550);
-            cooldown=1200;
+
+
         }
         g.dispose();
         strategy.show();
-
     }
 
+    private void gameOver() {
+        cooldown=1200;
+        points=0;
+        p3 = new Vector(300,300);
+        p2= new Vector (600,600);
+        p = new Vector(50, 50);
+
+        a = new Vector(0,0);
+        v = new Vector(0,0);
+        gameOver= false;
+    }
 
 
     private void handleKeys(){
@@ -282,11 +331,10 @@ public class Game extends JFrame implements KeyListener {
                 }else{
                         switch(keys.get(i)){
                             case KeyEvent.VK_R:
-                                p = new Vector(50, 50);
-                                p2 = new Vector(300, 300);
-                              gameOver= false;
-                                a = new Vector(0,0);
-                                v = new Vector(0,0);
+
+
+                                gameOver();
+
                                 break;
                     }
             }
