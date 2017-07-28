@@ -12,7 +12,8 @@ import java.util.ArrayList;
 public class Game extends JFrame implements KeyListener {
 
 
-    boolean accelerating = false, spacePressed, wallHit = false;
+    private boolean accelerating = false;
+    private boolean spacePressed;
     //window vars
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
@@ -41,11 +42,11 @@ public class Game extends JFrame implements KeyListener {
     private long startFrame; //time since start of frame
     private int fps; //current fps
 
-    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5;
+    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6;
 
     float friction, push;
 
-    int sz, cooldown, sz2, sz3, sz4, sz5;
+    int sz, cooldown, sz2, sz3, sz4, sz5, sz6;
 
     int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1;
 
@@ -91,12 +92,14 @@ public class Game extends JFrame implements KeyListener {
         p3 = new Vector(300, 300);
         p4 = new Vector(100, 600);
         p5 = new Vector(700, 30);
+        p6 = new Vector(500, 100);
 
 
         v = new Vector(0, 0);
         v2 = new Vector(0, 0);
         v4 = new Vector(10, 10);
         v5 = new Vector(5, 5);
+        v6 = new Vector(0, 0);
 
 
         friction = .99f;
@@ -104,6 +107,7 @@ public class Game extends JFrame implements KeyListener {
         a2 = new Vector(1, 1);
         a4 = new Vector(10, 10);
         a5 = new Vector(3, 3);
+        a6 = new Vector(1, 1);
 
         push = 100;
         cooldown = 1200;
@@ -112,6 +116,7 @@ public class Game extends JFrame implements KeyListener {
         sz3 = 20;
         sz4 = 70;
         sz5 = 40;
+        sz6 = 30;
 
 
     }
@@ -155,6 +160,11 @@ public class Game extends JFrame implements KeyListener {
                 }
                 a2 = Vector.unit2D((float) Math.toRadians(randomNum * randomNum2));
                 a2.mult(push * 5);
+
+                a6 = Vector.unit2D((float) Math.toRadians(randomNum * randomNum2));
+                a6.mult(push * 5);
+
+
                 // v+= a *dt;
                 // p += v* dt;
                 v.add(Vector.mult(a, dt));
@@ -162,12 +172,18 @@ public class Game extends JFrame implements KeyListener {
 
                 p2.add(Vector.mult(v2, dt));
 
+                v6.add(Vector.mult(a6, dt));
+
+                p6.add(Vector.mult(v6, dt));
+
                 v.mult(friction);
                 v2.mult(friction);
 
 
                 p.add(Vector.mult(v, dt));
                 p2.add(Vector.mult(v2, dt));
+
+                p6.add(Vector.mult(v6, dt));
 
 
                 //following ai
@@ -197,9 +213,9 @@ public class Game extends JFrame implements KeyListener {
 
 
     private void setCooldown() {
-        if (cooldown >= 12 && spacePressed == true) {
+        if (cooldown >= 12 && spacePressed) {
             cooldown -= 12;
-        } else if (cooldown < 1200 && spacePressed == false) {
+        } else if (cooldown < 1200 && !spacePressed) {
             cooldown += 12;
         }
     }
@@ -224,14 +240,24 @@ public class Game extends JFrame implements KeyListener {
             v2.setX(v2.x * -1);
             a2.setX(a2.x * -1);
             a2 = new Vector(0, 0);
-            wallHit = true;
         }
 
         if (p2.y + sz2 > HEIGHT - 14 || p2.y < 31) {
 
             v2.setY(v2.y * -1);
             a2 = new Vector(0, 0);
-            wallHit = true;
+        }
+
+        if (p6.x + sz6 > WIDTH - 14 || p6.x < 17) {
+            v6.setX(v6.x * -1);
+            a6.setX(a6.x * -1);
+            a6= new Vector(0, 0);
+        }
+
+        if (p6.y + sz6 > HEIGHT - 14 || p6.y < 31) {
+
+            v6.setY(v6.y * -1);
+            a6 = new Vector(0, 0);
         }
     }
 
@@ -263,7 +289,30 @@ public class Game extends JFrame implements KeyListener {
             a2 = new Vector(0, 0);
             p2.add(Vector.mult(v2, dt * 3));
         }
+      //fly + fly2
+        if (checkCollision(p6.x, p2.x, p6.y, p2.y, sz6, sz2)) {
 
+            v2.setY(v2.y * -1);
+            v2.setX(v2.x * -1);
+            a2 = new Vector(0, 0);
+            p2.add(Vector.mult(v2, dt * 3));
+        }
+
+
+        // fly 2
+        if (checkCollision(p6.x, p3.x, p6.y, p3.y, sz6, sz3)) {
+            v6.setY(v6.y * -1);
+            v6.setX(v6.x * -1);
+            a6 = new Vector(0, 0);
+        }
+       //fly 2
+        if (checkCollision(p4.x, p6.x, p4.y, p6.y, sz4, sz6)) {
+
+            v6.setY(v2.y * -1);
+            v6.setX(v2.x * -1);
+            a6 = new Vector(0, 0);
+            p6.add(Vector.mult(v2, dt * 15));
+        }
 
         // checks if white and GReen blocks collide
         if (checkCollision(p.x, p3.x, p.y, p3.y, sz, sz3)) {
@@ -302,14 +351,10 @@ public class Game extends JFrame implements KeyListener {
 
     private boolean checkCollision(float x, float x2, float y, float y2, int sz, int sz2) {
 
-        if (x < x2 + sz2 &&
+        return x < x2 + sz2 &&
                 x + sz > x2 &&
                 y < y2 + sz2 &&
-                y + sz > y2) {
-            return true;
-        } else {
-            return false;
-        }
+                y + sz > y2;
 
 
     }
@@ -328,9 +373,10 @@ public class Game extends JFrame implements KeyListener {
         g.clearRect(0, 0, WIDTH, HEIGHT);
         switch (GameState) {
             case MENU:
-                g.clearRect(0, 0, WIDTH, HEIGHT);
-                g.setColor(new Color(0, 0, 0));
                 g.fillRect(0, 0, WIDTH, HEIGHT);
+
+
+                g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\Game Over.jpg"), 0, 0, WIDTH, HEIGHT, null);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
                 g.setColor(Color.WHITE);
 
@@ -358,6 +404,10 @@ public class Game extends JFrame implements KeyListener {
                 //predicting
                 g.setColor(Color.PINK);
                 g.fillRect(p5.ix, p5.iy, sz5, sz5);
+
+                //
+                g.setColor(Color.BLACK);
+                g.fillRect(p6.ix, p6.iy, sz6, sz6);
 
 
                 //Roof + Floor
