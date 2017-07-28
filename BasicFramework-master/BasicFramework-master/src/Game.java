@@ -12,50 +12,41 @@ import java.util.ArrayList;
 public class Game extends JFrame implements KeyListener {
 
 
-    private boolean accelerating = false;
-    private boolean spacePressed;
     //window vars
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
     private final int HEIGHT; //window height
-   // final float T = 10f;
-
-    enum GAME_STATES {
-        MENU,
-        PLAY,
-        SCORE;
-    }
-
     public GAME_STATES GameState = GAME_STATES.MENU;
-
-
+    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6;
+   // final float T = 10f;
+    float friction, push;
+    int sz, cooldown, sz2, sz3, sz4, sz5, sz6;
+    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1;
+    private boolean accelerating = false;
+    private boolean spacePressed;
     //double buffer strategy
     private BufferStrategy strategy;
     private ArrayList<Integer> keys = new ArrayList<>();
     //loop variables
     private boolean isRunning = true; //is the window running
     private long rest = 0; //how long to sleep the main thread
-
     //timing variables
     private float dt; //delta time
     private long lastFrame; //time since last frame
     private long startFrame; //time since start of frame
     private int fps; //current fps
 
-    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6;
-
-    float friction, push;
-
-    int sz, cooldown, sz2, sz3, sz4, sz5, sz6;
-
-    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1;
-
-
     public Game(int width, int height, int fps) {
         super("My Game");
         this.MAX_FPS = fps;
         this.WIDTH = width;
         this.HEIGHT = height;
+    }
+
+    //entry point for application
+    public static void main(String[] args) {
+        Game game = new Game(1080, 700, 60);
+        game.run();
     }
 
     /*
@@ -584,10 +575,10 @@ public class Game extends JFrame implements KeyListener {
 
     }
 
-    //entry point for application
-    public static void main(String[] args) {
-        Game game = new Game(1080, 700, 60);
-        game.run();
+    enum GAME_STATES {
+        MENU,
+        PLAY,
+        SCORE;
     }
 
 }
