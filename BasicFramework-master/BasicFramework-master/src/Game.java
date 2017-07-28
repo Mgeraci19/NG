@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//TODO x collision on random + white doesnt work and red following ai and block can still get stuck in walls
 public class Game extends JFrame implements KeyListener {
 
 
@@ -18,7 +17,7 @@ public class Game extends JFrame implements KeyListener {
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
     private final int HEIGHT; //window height
-    final float T = 3f;
+   // final float T = 10f;
 
     enum GAME_STATES {
         MENU,
@@ -97,14 +96,14 @@ public class Game extends JFrame implements KeyListener {
         v = new Vector(0, 0);
         v2 = new Vector(0, 0);
         v4 = new Vector(10, 10);
-        v5 = new Vector(10, 10);
+        v5 = new Vector(5, 5);
 
 
         friction = .99f;
         a = new Vector(0, 0);
         a2 = new Vector(1, 1);
         a4 = new Vector(10, 10);
-        a5 = new Vector(10, 10);
+        a5 = new Vector(3, 3);
 
         push = 100;
         cooldown = 1200;
@@ -179,11 +178,16 @@ public class Game extends JFrame implements KeyListener {
                 p4.add(Vector.mult(v4, dt));
 
                 // predicting ai
-                v5 = Vector.sub(p,Vector.add(p5,Vector.mult(v5,T)));
+             /*   v5 = Vector.sub(p,Vector.add(p5,Vector.mult(v5,T)));
                 v5.setMag(100);
                 v5.add(Vector.mult(a5, dt));
                 p5.add(Vector.mult(v5, dt));
+*/
 
+                v5 = Vector.sub(p3,Vector.add(p5,Vector.mult(v,.25f)));
+                v5.setMag(50);
+                v5.add(Vector.mult(a5, dt));
+                p5.add(Vector.mult(v5, dt));
 
                 accelerating = false;
                 spacePressed = false;
@@ -271,6 +275,25 @@ public class Game extends JFrame implements KeyListener {
             movePoints();
             points--;
             sz4 += 15;
+
+            //white pink
+            if (checkCollision(p5.x, p3.x, p5.y, p3.y, sz5, sz3)) {
+                movePoints();
+                points--;
+                v5.mult(1.2f);
+            }
+
+            //red pink
+            if (checkCollision(p5.x, p4.x, p5.y, p4.y, sz5, sz4)) {
+                v5.setY(v5.y * -1);
+                v5.setX(v5.x * -1);
+                a5 = new Vector(0, 0);
+                p5.add(Vector.mult(v5, dt * 3));
+            }
+            //pink green
+            if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5)) {
+                GameState = GAME_STATES.SCORE;
+            }
 
         }
 
@@ -378,7 +401,7 @@ public class Game extends JFrame implements KeyListener {
     }
 
 
-    private void handleKeys() {
+    public void handleKeys() {
         for (int i = 0; i < keys.size(); i++) {
 
             switch (GameState) {
