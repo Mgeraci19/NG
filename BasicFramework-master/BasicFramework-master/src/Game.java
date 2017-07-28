@@ -1,19 +1,33 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 //TODO x collision on random + white doesnt work and red following ai and block can still get stuck in walls
 public class Game extends JFrame implements KeyListener {
 
 
-    boolean gameOver = false, accelerating= false, spacePressed, wallHit= false;
+    boolean accelerating= false, spacePressed, wallHit= false;
     //window vars
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
     private final int HEIGHT; //window height
 
+    enum GAME_STATES{
+        MENU,
+        PLAY,
+        SCORE;
+    }
+    
+    public GAME_STATES GameState =  GAME_STATES.MENU;
+        
+
+    
     //double buffer strategy
     private BufferStrategy strategy;
     private ArrayList<Integer> keys = new ArrayList<>();
@@ -27,11 +41,11 @@ public class Game extends JFrame implements KeyListener {
     private long startFrame; //time since start of frame
     private int fps; //current fps
 
-    Vector p,a, a2, p2,v,v2,v4,a4, p3,p4;
+    Vector p,a, a2, p2,v,v2,v4,a4, p3,p4, p5, v5, a5;
 
     float friction , push;
 
-    int sz, cooldown, sz2,sz3,sz4;
+    int sz, cooldown, sz2,sz3,sz4, sz5;
 
     int randomNum=1, randomNum2 = 1,points=0, randomNum3= 1,randomNum4=1;
 
@@ -71,16 +85,19 @@ public class Game extends JFrame implements KeyListener {
         setBackground(Color.DARK_GRAY);
 
 
-
+        points = 0;
         p = new Vector(50, 50);
         p2= new Vector(800, 600);
         p3= new Vector(300, 300);
         p4= new Vector(100, 600);
+        p5 = new Vector(700, 30);
 
 
         v = new Vector (0, 0);
         v2 = new Vector(0, 0);
         v4 = new Vector (10,10);
+        v5 = new Vector (10,10);
+
 
 
 
@@ -88,6 +105,7 @@ public class Game extends JFrame implements KeyListener {
         a = new Vector (0,0);
         a2 = new Vector (1,1);
         a4 = new Vector (10,10);
+        a5 = new Vector (10,10);
 
         push= 100;
         cooldown = 1200;
@@ -95,9 +113,20 @@ public class Game extends JFrame implements KeyListener {
         sz2=15;
         sz3 = 20;
         sz4 = 70;
+        sz5 = 40;
 
 
 
+
+    }
+
+    private BufferedImage createTexture (String path){
+        try{
+            return ImageIO.read(new File(path));
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /*
@@ -113,43 +142,59 @@ public class Game extends JFrame implements KeyListener {
         randomNum4= (int)(Math.random()*600+30);
 
         handleKeys();
-        setCooldown();
-        wallCollision();
-        blockCollision();
-        //makes acceleration stop if space isnt pressed
-        if (!accelerating){
-            a = new Vector(0,0);
+        
+        switch ((GameState)){
+            case MENU:
+
+            case SCORE:
+                break;
+            case PLAY:
+
+                setCooldown();
+                wallCollision();
+                blockCollision();
+                //makes acceleration stop if space isnt pressed
+                if (!accelerating) {
+                    a = new Vector(0, 0);
+                }
+                    a2 = Vector.unit2D((float) Math.toRadians(randomNum * randomNum2));
+                    a2.mult(push * 5);
+                    // v+= a *dt;
+                    // p += v* dt;
+                    v.add(Vector.mult(a, dt));
+                    v2.add(Vector.mult(a2, dt));
+
+                    p2.add(Vector.mult(v2, dt));
+
+                    v.mult(friction);
+                    v2.mult(friction);
+
+
+                    p.add(Vector.mult(v, dt));
+                    p2.add(Vector.mult(v2, dt));
+
+
+                    //following ai
+
+                    v4 = Vector.sub(p, p4);
+                    v4.setMag(100);
+                    v4.add(Vector.mult(a, dt));
+                    p4.add(Vector.mult(v4, dt));
+
+                    // predicting ai
+                    v5 = Vector.sub()
+
+
+                    accelerating = false;
+                    spacePressed = false;
+
+                }     
         }
-        a2 = Vector.unit2D((float) Math.toRadians(randomNum*randomNum2));
-        a2.mult(push*5) ;
-        // v+= a *dt;
-        // p += v* dt;
-        v.add(Vector.mult(a,dt));
-        v2.add(Vector.mult(a2,dt));
-
-        p2.add(Vector.mult(v2,dt));
-
-        v.mult(friction);
-        v2.mult(friction);
+        
+        
+    
 
 
-
-        p.add(Vector.mult(v,dt));
-        p2.add(Vector.mult(v2,dt));
-
-
-        //following ai
-
-        v4= Vector.sub(p,p4);
-        v4.setMag(100);
-        v4.add(Vector.mult(a,dt));
-        p4.add(Vector.mult(v4,dt));
-
-
-        accelerating = false;
-        spacePressed= false;
-
-    }
 
     private  void setCooldown(){
         if(cooldown>=12  && spacePressed==true){
@@ -199,13 +244,13 @@ public class Game extends JFrame implements KeyListener {
 
         //checks if player collides with yellow block
         if(checkCollision(p.x,p2.x,p.y,p2.y,sz,sz2)){
-           gameOver = true;
+            GameState = GAME_STATES.SCORE;
        }
 
         if(checkCollision(p.x,p4.x,p.y,p4.y,sz,sz4)){
-            gameOver = true;
+           GameState = GAME_STATES.SCORE;
         }
-        //checks if yellow block collides with white block
+        //checks if fly collides with white block
         if(checkCollision(p2.x,p3.x,p2.y,p3.y,sz2,sz3)){
             v2.setY(v2.y * -1);
             v2.setX(v2.x * -1);
@@ -213,27 +258,26 @@ public class Game extends JFrame implements KeyListener {
         }
         // fly + red
         if(checkCollision(p4.x,p2.x,p4.y,p2.y,sz4,sz2)){
+
             v2.setY(v2.y * -1);
             v2.setX(v2.x * -1);
             a2 = new Vector(0, 0);
-
-            System.out.println("H");
+            p2.add(Vector.mult(v2,dt*3));
         }
 
-        if(checkCollision(p2.x,p4.x,p2.y,p4.y,sz2,sz4)){
-            v2.setY(v2.y * -1);
-            v2.setX(v2.x* -1);
-            a2 = new Vector(0, 0);
-        }
+     
 
-        // checks if white and yellow blocks collide
+        // checks if white and GReen blocks collide
         if(checkCollision(p.x,p3.x,p.y,p3.y,sz,sz3)){
             points++;
             movePoints();
         }
-
+        // White + red
         if(checkCollision(p4.x,p3.x,p4.y,p3.y,sz4,sz3)){
-           System.out.println("w");
+        movePoints();
+         points--;
+         sz4+=15;
+
         }
 
 
@@ -242,7 +286,7 @@ public class Game extends JFrame implements KeyListener {
 
     }
 
-private boolean checkCollision(float x , float x2, float y,float y2, int sz, int sz2) {
+    private boolean checkCollision(float x , float x2, float y,float y2, int sz, int sz2) {
 
     if (x < x2 + sz2 &&
             x+ sz > x2 &&
@@ -256,6 +300,9 @@ return true;
 
 }
 
+
+
+
     /*
      * draw()
      * gets the canvas (Graphics2D) and draws all elements
@@ -267,90 +314,99 @@ return true;
 
         //clear screen
         g.clearRect(0,0,WIDTH, HEIGHT);
+switch (GameState){
+    case MENU:
+        g.clearRect(0,0,WIDTH, HEIGHT);
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(0, 0, WIDTH,HEIGHT);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
+        g.setColor(Color.WHITE);
+
+        g.drawString("Press ENTER to play", 50, 550);
+   
+    break;
+    case PLAY:
+        g.clearRect(0,0,WIDTH, HEIGHT);
+        //player
+        g.setColor(Color.GREEN);
+        g.fillRect(p.ix, p.iy, sz, sz);
+
+        //random
+        g.setColor(Color.BLACK);
+        g.fillRect(p2.ix, p2.iy, sz2, sz2);
+
+        //points
+        g.setColor(Color.WHITE);
+        g.fillRect(p3.ix, p3.iy, sz3, sz3);
+
+        //tracking
+        g.setColor(Color.RED);
+        g.fillRect(p4.ix, p4.iy, sz4, sz4);
 
 
-        if (!gameOver) {
-           //player
-            g.setColor(Color.GREEN);
-            g.fillRect(p.ix, p.iy, sz, sz);
+        //Roof + Floor
+        g.setColor(Color.YELLOW);
+        g.fillRect(0, 0, WIDTH, 34);
 
-            //random
-            g.setColor(Color.BLACK);
-            g.fillRect(p2.ix, p2.iy, sz2, sz2);
+        g.setColor(Color.YELLOW);
+        g.fillRect(0, 686, WIDTH, 1080);
+        // Walls
+        g.setColor(Color.YELLOW);
+        g.fillRect(0, 0, 16, HEIGHT);
 
-            //points
-            g.setColor(Color.WHITE);
-            g.fillRect(p3.ix, p3.iy, sz3, sz3);
-
-            //tracking
-            g.setColor(Color.RED);
-            g.fillRect(p4.ix, p4.iy, sz4, sz4);
+        g.setColor(Color.YELLOW);
+        g.fillRect(1066, 0, 1080, HEIGHT);
 
 
-            //Roof + Floor
-            g.setColor(Color.YELLOW);
-            g.fillRect(0, 0, WIDTH, 34);
-
-            g.setColor(Color.YELLOW);
-            g.fillRect(0, 686, WIDTH, 1080);
-            // Walls
-            g.setColor(Color.YELLOW);
-            g.fillRect(0, 0, 16, HEIGHT);
-
-            g.setColor(Color.YELLOW);
-            g.fillRect(1066, 0, 1080, HEIGHT);
-
-
-            //draw fps
-            g.setColor(Color.GREEN);
-            g.drawString(Long.toString(fps), 10, 40);
-            g.drawString(Long.toString(cooldown), 540, 50);
-            g.drawString(Long.toString(points), 900 , 50);
-            //release resources, show the buffer
-
-        } else{
-            g.setColor(Color.BLACK);
-            g.fillRect(0, 0, WIDTH, HEIGHT);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
-            g.setColor(Color.RED);
-
-            g.drawString("Game Over", 200, 350);
-
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-            g.setColor(Color.WHITE);
-            g.drawString("Press R to restart", 200, 550);
+        //draw fps
+        g.setColor(Color.GREEN);
+        g.drawString(Long.toString(fps), 10, 40);
+        g.drawString(Long.toString(cooldown), 540, 50);
+        g.drawString(Long.toString(points), 900 , 50);
+        //release resources, show the buffer
+        break;
+    case SCORE:
+        g.clearRect(0,0,WIDTH, HEIGHT);
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
 
 
-        }
+        g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\Game Over.jpg"), 0,0,WIDTH,HEIGHT,null);
+
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+        g.setColor(Color.WHITE);
+        g.drawString("Press R to restart", 200, 550);
+        break;
+}
+
+     
         g.dispose();
         strategy.show();
     }
 
-    private void gameOver() {
-        cooldown=1200;
-        points=0;
-        p3 = new Vector(300,300);
-        p2= new Vector (600,600);
-        p = new Vector(50, 50);
-        p4= new Vector(100, 600);
 
-        a = new Vector(0,0);
-        v = new Vector(0,0);
-        gameOver= false;
-    }
 
 
     private void handleKeys(){
-        for(int i =0; i <keys.size();i++){
+        for(int i =0; i <keys.size();i++) {
 
-                if (!gameOver) {
+            switch (GameState) {
+
+                case MENU:
+                    switch (keys.get(i)) {
+                        case KeyEvent.VK_ENTER:
+
+                            init();
+                            GameState = GAME_STATES.PLAY;
 
 
+                            break;
+                    }
+                case PLAY:
 
+                switch (keys.get(i)) {
 
-                    switch(keys.get(i)){
-
-                        case KeyEvent.VK_UP:
+                    case KeyEvent.VK_UP:
                         a = Vector.unit2D((float) Math.toRadians(-90));
                         a.mult(push);
                         accelerating = true;
@@ -368,38 +424,40 @@ return true;
                         accelerating = true;
                         break;
 
-                    case KeyEvent.VK_RIGHT  :
+                    case KeyEvent.VK_RIGHT:
                         a = Vector.unit2D((0));
                         a.mult(push);
                         accelerating = true;
                         break;
 
-                        case KeyEvent.VK_SPACE:
-                            spacePressed= true;
-                                if(cooldown>0) {
-                                    a.mult(5);
+                    case KeyEvent.VK_SPACE:
+                        spacePressed = true;
+                        if (cooldown > 0) {
+                            a.mult(5);
 
-                                }
+                        }
 
 
+                        break;
 
-                            break;
 
                 }
-                }else{
-                        switch(keys.get(i)){
-                            case KeyEvent.VK_R:
+
+                    break;
+                case SCORE:
+                switch (keys.get(i)) {
+                    case KeyEvent.VK_R:
+                        init();
+                        GameState = GAME_STATES.MENU;
 
 
-                                gameOver();
-
-                                break;
-                    }
+                        break;
+                }
             }
-
+        }
 
         }
-    }
+    
 
 
     @Override
