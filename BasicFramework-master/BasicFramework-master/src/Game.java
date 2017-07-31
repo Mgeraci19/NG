@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+//todo wanderer wall collision
 public class Game extends JFrame implements KeyListener {
 
 
@@ -19,10 +20,10 @@ public class Game extends JFrame implements KeyListener {
     public GAME_STATES GameState = GAME_STATES.MENU;
     Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7;
    // final float T = 10f;
-    float friction, push,k=100f,rad = 10;
+    float friction, push,k=100f,rad = 1000;
     int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7;
-    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1;
-    private boolean accelerating = false;
+    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c;
+    private boolean accelerating = false,right;
     private boolean spacePressed;
     //double buffer strategy
     private BufferStrategy strategy;
@@ -84,7 +85,7 @@ public class Game extends JFrame implements KeyListener {
         p4 = new Vector(100, 600);
         p5 = new Vector(700, 30);
         p6 = new Vector(500, 100);
-        p7 = new Vector(800, 600);
+        p7 = new Vector(40, 200);
 
 
         v = new Vector(0, 0);
@@ -92,7 +93,7 @@ public class Game extends JFrame implements KeyListener {
         v4 = new Vector(10, 10);
         v5 = new Vector(5, 5);
         v6 = new Vector(0, 0);
-        v7 = new Vector(5, 5);
+        v7 = new Vector(10, 10);
 
 
         friction = .99f;
@@ -101,18 +102,18 @@ public class Game extends JFrame implements KeyListener {
         a4 = new Vector(10, 10);
         a5 = new Vector(3, 3);
         a6 = new Vector(1, 1);
-        a7 = new Vector(1, 1);
+        a7 = new Vector(10, 10);
 
         push = 100;
         cooldown = 1200;
-        sz = 30;
+        sz = 70;
         sz2 = 15;
-        sz3 = 20;
+        sz3 = 40;
         sz4 = 70;
         sz5 = 40;
         sz6 = 30;
         sz7 = 30;
-
+        c= 0;
 
 
     }
@@ -191,10 +192,17 @@ public class Game extends JFrame implements KeyListener {
                 movement(v6,a6,p6,dt);
 
                 //wander
-               v7 = Vector.mult(Vector.unit2D(v7.dir()),10);
-               v7.add(Vector.mult(Vector.rand2D(),rad));
-               v7.setMag(10);
-                p7.add(Vector.mult(v7,dt));
+                if(points>=5) {
+                   // v7 = Vector.mult(Vector.unit2D(v7.dir()), 1f);
+                    if(c== 0) {
+                        v7.add(Vector.mult(Vector.random2D(), rad));
+                        v7.setMag(100);
+                        c= 60;
+                        System.out.println(v7.x + " " + v7.y);
+                    }
+                    c--;
+                    p7.add(Vector.mult(v7, dt));
+                }
 
 
 
@@ -206,7 +214,7 @@ public class Game extends JFrame implements KeyListener {
                 p4.add(Vector.mult(v4, dt));
 
 
-
+                //[redicting ai
                 v5 = Vector.sub(p3,Vector.add(p5,Vector.mult(v,.25f)));
                 v5.setMag(50);
                 v5.add(Vector.mult(a5, dt));
@@ -240,6 +248,7 @@ public class Game extends JFrame implements KeyListener {
             v.setY(v.y * -1);
             a.setY(a.y * -1);
             a = new Vector(0, 0);
+            p.add(Vector.mult(v,dt));
         }
 
 
@@ -260,12 +269,14 @@ public class Game extends JFrame implements KeyListener {
 
             v7.setY(v2.y * -1);
             a7= new Vector(0, 0);
+            p7.add(Vector.mult(v7,dt));
         }
 
         if (p7.x + sz7 > WIDTH - 14 || p7.x < 17) {
             v7.setX(v7.x * -1);
             a7.setX(a7.x * -1);
             a7 = new Vector(0, 0);
+            p7.add(Vector.mult(v7,dt));
         }
 
         if (p6.x + sz6 > WIDTH - 14 || p6.x < 17) {
@@ -304,6 +315,10 @@ public class Game extends JFrame implements KeyListener {
 
         //pink green
         if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5)&&points>16) {
+        GameState = GAME_STATES.SCORE;
+    }
+
+        if (checkCollision(p.x, p7.x, p.y, p7.y, sz, sz7)&&points>=6) {
             GameState = GAME_STATES.SCORE;
         }
         //checks if fly collides with white block
@@ -378,9 +393,22 @@ public class Game extends JFrame implements KeyListener {
                 break;
             case PLAY:
                 g.clearRect(0, 0, WIDTH, HEIGHT);
+
+                Image background = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\pixel_waterfall.gif");
+                g.drawImage(background, 0,0,WIDTH,HEIGHT,null);
+
+
+
                 //player
-                g.setColor(Color.GREEN);
-                g.fillRect(p.ix, p.iy, sz, sz);
+                if(!right) {
+                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter.png");
+                    g.drawImage(heli, p.ix,p.iy,sz,sz,null);
+                }else{
+                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter2.png");
+                    g.drawImage(heli, p.ix,p.iy,sz,sz,null);
+                }
+
+
 
                 //random
                 g.setColor(Color.BLACK);
@@ -495,12 +523,14 @@ public class Game extends JFrame implements KeyListener {
                             a = Vector.unit2D((float) Math.toRadians(180));
                             a.mult(push);
                             accelerating = true;
+                            right=false;
                             break;
 
                         case KeyEvent.VK_RIGHT:
                             a = Vector.unit2D((0));
                             a.mult(push);
                             accelerating = true;
+                            right = true;
                             break;
 
                         case KeyEvent.VK_SPACE:
@@ -509,6 +539,10 @@ public class Game extends JFrame implements KeyListener {
                                 a.mult(5);
 
                             }
+
+                            break;
+                        case KeyEvent.VK_P:
+                            points++;
 
 
                             break;

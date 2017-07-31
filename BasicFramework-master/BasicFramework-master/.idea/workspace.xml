@@ -16,34 +16,24 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="148" column="0" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+            <state relative-caret-position="354">
+              <caret line="113" column="9" lean-forward="true" selection-start-line="113" selection-start-column="9" selection-end-line="113" selection-end-column="9" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#init#0;class#Game#0" expanded="false" />
+                <element signature="method#Game#0;class#Game#0" expanded="false" />
+                <element signature="method#main#0;class#Game#0" expanded="false" />
                 <element signature="method#createTexture#0;class#Game#0" expanded="false" />
                 <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
                 <element signature="method#movement#0;class#Game#0" expanded="false" />
+                <element signature="method#update#0;class#Game#0" expanded="false" />
                 <element signature="method#setCooldown#0;class#Game#0" expanded="false" />
                 <element signature="method#wallCollision#0;class#Game#0" expanded="false" />
                 <element signature="method#blockCollision#0;class#Game#0" expanded="false" />
                 <element signature="method#checkCollision#0;class#Game#0" expanded="false" />
-                <element signature="method#draw#0;class#Game#0" expanded="false" />
-                <element signature="method#handleKeys#0;class#Game#0" expanded="false" />
                 <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
                 <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
                 <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
+                <element signature="method#run#0;class#Game#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BasicFramework.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/BasicFramework.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="11" column="19" lean-forward="false" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -51,8 +41,8 @@
       <file leaf-file-name="Vector.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Vector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
+            <state relative-caret-position="3587">
+              <caret line="235" column="5" lean-forward="true" selection-start-line="235" selection-start-column="5" selection-end-line="235" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -67,6 +57,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>normalize</find>
+    </findStrings>
+  </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
       <projects_view />
@@ -76,14 +71,14 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/Collision.java" />
+        <option value="$PROJECT_DIR$/src/Vector.java" />
         <option value="$PROJECT_DIR$/src/Game.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
+    <option name="x" value="4" />
+    <option name="width" value="1924" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
@@ -410,7 +405,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="4" y="0" width="1924" height="1056" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -428,7 +423,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18134172" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -483,26 +478,68 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>463</line>
-          <properties />
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>285</line>
+          <line>296</line>
           <properties />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Game.java</url>
+          <line>300</line>
+          <properties />
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Game.java</url>
+          <line>57</line>
+          <properties />
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Game.java</url>
+          <line>121</line>
+          <properties />
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Game.java</url>
+          <line>491</line>
+          <properties />
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>55</line>
+          <line>149</line>
+          <properties class="Game" method="update">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/Game.java</url>
+          <line>237</line>
+          <properties class="Game" method="wallCollision">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/Game.java</url>
+          <line>490</line>
+          <properties class="Game" method="handleKeys">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/Game.java</url>
+          <line>56</line>
           <properties class="Game" method="init">
             <option name="EMULATED" value="true" />
           </properties>
-          <option name="timeStamp" value="20" />
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="26" />
+      <option name="time" value="39" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -516,20 +553,20 @@
         <state relative-caret-position="340">
           <caret line="20" column="26" lean-forward="true" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#init#0;class#Game#0" expanded="false" />
+            <element signature="method#Game#0;class#Game#0" expanded="false" />
+            <element signature="method#main#0;class#Game#0" expanded="false" />
             <element signature="method#createTexture#0;class#Game#0" expanded="false" />
             <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
             <element signature="method#movement#0;class#Game#0" expanded="false" />
+            <element signature="method#update#0;class#Game#0" expanded="false" />
             <element signature="method#setCooldown#0;class#Game#0" expanded="false" />
             <element signature="method#wallCollision#0;class#Game#0" expanded="false" />
             <element signature="method#blockCollision#0;class#Game#0" expanded="false" />
             <element signature="method#checkCollision#0;class#Game#0" expanded="false" />
-            <element signature="method#draw#0;class#Game#0" expanded="false" />
-            <element signature="method#handleKeys#0;class#Game#0" expanded="false" />
             <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
             <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
+            <element signature="method#run#0;class#Game#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -546,14 +583,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" column="19" lean-forward="true" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Vector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -586,14 +615,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BasicFramework.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="11" column="19" lean-forward="false" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_111/jre/lib/rt.jar!/sun/awt/windows/WComponentPeer.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="623">
@@ -607,25 +628,41 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/BasicFramework.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="11" column="19" lean-forward="false" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Vector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3587">
+          <caret line="235" column="5" lean-forward="true" selection-start-line="235" selection-start-column="5" selection-end-line="235" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="148" column="0" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+        <state relative-caret-position="354">
+          <caret line="113" column="9" lean-forward="true" selection-start-line="113" selection-start-column="9" selection-end-line="113" selection-end-column="9" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#init#0;class#Game#0" expanded="false" />
+            <element signature="method#Game#0;class#Game#0" expanded="false" />
+            <element signature="method#main#0;class#Game#0" expanded="false" />
             <element signature="method#createTexture#0;class#Game#0" expanded="false" />
             <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
             <element signature="method#movement#0;class#Game#0" expanded="false" />
+            <element signature="method#update#0;class#Game#0" expanded="false" />
             <element signature="method#setCooldown#0;class#Game#0" expanded="false" />
             <element signature="method#wallCollision#0;class#Game#0" expanded="false" />
             <element signature="method#blockCollision#0;class#Game#0" expanded="false" />
             <element signature="method#checkCollision#0;class#Game#0" expanded="false" />
-            <element signature="method#draw#0;class#Game#0" expanded="false" />
-            <element signature="method#handleKeys#0;class#Game#0" expanded="false" />
             <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
             <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
+            <element signature="method#run#0;class#Game#0" expanded="false" />
           </folding>
         </state>
       </provider>

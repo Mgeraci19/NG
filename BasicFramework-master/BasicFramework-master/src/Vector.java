@@ -239,6 +239,10 @@ public class Vector {
         return normalize(new Vector((float)Math.random(), (float)Math.random(), 0f));
     }
 
+    public static Vector random2D(){
+        return normalize(new Vector((float)(Math.random()*2) -1, (float)(Math.random()*2)-1, 0f));
+    }
+
     public static Vector unit2D(float rad){
         return new Vector((float)Math.cos(rad), (float)Math.sin(rad));
     }
