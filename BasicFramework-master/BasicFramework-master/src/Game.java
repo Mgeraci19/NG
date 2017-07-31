@@ -12,7 +12,6 @@ import java.util.ArrayList;
 //todo wanderer wall collision
 public class Game extends JFrame implements KeyListener {
 
-
     //window vars
     private final int MAX_FPS; //maximum refresh rate
     private final int WIDTH; //window width
