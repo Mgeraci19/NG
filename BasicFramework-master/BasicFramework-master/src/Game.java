@@ -17,10 +17,10 @@ public class Game extends JFrame implements KeyListener {
     private final int WIDTH; //window width
     private final int HEIGHT; //window height
     public GAME_STATES GameState = GAME_STATES.MENU;
-    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6;
+    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7;
    // final float T = 10f;
-    float friction, push;
-    int sz, cooldown, sz2, sz3, sz4, sz5, sz6;
+    float friction, push,k=100f,rad = 10;
+    int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7;
     int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1;
     private boolean accelerating = false;
     private boolean spacePressed;
@@ -84,6 +84,7 @@ public class Game extends JFrame implements KeyListener {
         p4 = new Vector(100, 600);
         p5 = new Vector(700, 30);
         p6 = new Vector(500, 100);
+        p7 = new Vector(800, 600);
 
 
         v = new Vector(0, 0);
@@ -91,6 +92,7 @@ public class Game extends JFrame implements KeyListener {
         v4 = new Vector(10, 10);
         v5 = new Vector(5, 5);
         v6 = new Vector(0, 0);
+        v7 = new Vector(5, 5);
 
 
         friction = .99f;
@@ -99,6 +101,7 @@ public class Game extends JFrame implements KeyListener {
         a4 = new Vector(10, 10);
         a5 = new Vector(3, 3);
         a6 = new Vector(1, 1);
+        a7 = new Vector(1, 1);
 
         push = 100;
         cooldown = 1200;
@@ -108,6 +111,8 @@ public class Game extends JFrame implements KeyListener {
         sz4 = 70;
         sz5 = 40;
         sz6 = 30;
+        sz7 = 30;
+
 
 
     }
@@ -185,6 +190,14 @@ public class Game extends JFrame implements KeyListener {
 
                 movement(v6,a6,p6,dt);
 
+                //wander
+               v7 = Vector.mult(Vector.unit2D(v7.dir()),10);
+               v7.add(Vector.mult(Vector.rand2D(),rad));
+               v7.setMag(10);
+                p7.add(Vector.mult(v7,dt));
+
+
+
                 //following ai
 
                 v4 = Vector.sub(p, p4);
@@ -192,12 +205,7 @@ public class Game extends JFrame implements KeyListener {
                 v4.add(Vector.mult(a, dt));
                 p4.add(Vector.mult(v4, dt));
 
-                // predicting ai
-             /*   v5 = Vector.sub(p,Vector.add(p5,Vector.mult(v5,T)));
-                v5.setMag(100);
-                v5.add(Vector.mult(a5, dt));
-                p5.add(Vector.mult(v5, dt));
-*/
+
 
                 v5 = Vector.sub(p3,Vector.add(p5,Vector.mult(v,.25f)));
                 v5.setMag(50);
@@ -246,6 +254,18 @@ public class Game extends JFrame implements KeyListener {
 
             v2.setY(v2.y * -1);
             a2 = new Vector(0, 0);
+        }
+        //wander
+        if (p7.y + sz7 > HEIGHT - 14 || p7.y < 31) {
+
+            v7.setY(v2.y * -1);
+            a7= new Vector(0, 0);
+        }
+
+        if (p7.x + sz7 > WIDTH - 14 || p7.x < 17) {
+            v7.setX(v7.x * -1);
+            a7.setX(a7.x * -1);
+            a7 = new Vector(0, 0);
         }
 
         if (p6.x + sz6 > WIDTH - 14 || p6.x < 17) {
@@ -379,6 +399,12 @@ public class Game extends JFrame implements KeyListener {
                      //tracking
                      g.setColor(Color.RED);
                      g.fillRect(p4.ix, p4.iy, sz4, sz4);
+                }
+
+                if(points>=5) {
+                    //tracking
+                    g.setColor(Color.ORANGE);
+                    g.fillRect(p7.ix, p7.iy, sz7, sz7);
                 }
 
               if(points>=15) {

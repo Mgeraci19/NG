@@ -16,11 +16,10 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="227" column="37" lean-forward="false" selection-start-line="227" selection-start-column="37" selection-end-line="227" selection-end-column="37" />
+            <state relative-caret-position="412">
+              <caret line="264" column="41" lean-forward="false" selection-start-line="264" selection-start-column="41" selection-end-line="264" selection-end-column="41" />
               <folding>
                 <element signature="method#Game#0;class#Game#0" expanded="false" />
-                <element signature="method#main#0;class#Game#0" expanded="false" />
                 <element signature="method#init#0;class#Game#0" expanded="false" />
                 <element signature="method#createTexture#0;class#Game#0" expanded="false" />
                 <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
@@ -34,7 +33,6 @@
                 <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
                 <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
                 <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
-                <element signature="method#run#0;class#Game#0" expanded="false" />
                 <element signature="class#GAME_STATES#0;class#Game#0" expanded="false" />
               </folding>
             </state>
@@ -486,7 +484,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>437</line>
+          <line>463</line>
           <properties />
           <option name="timeStamp" value="10" />
         </line-breakpoint>
@@ -498,7 +496,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>265</line>
+          <line>285</line>
           <properties />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
@@ -512,7 +510,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>268</line>
+          <line>288</line>
           <properties class="Game" method="blockCollision">
             <option name="EMULATED" value="true" />
           </properties>
@@ -534,7 +532,6 @@
           <caret line="20" column="26" lean-forward="true" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
           <folding>
             <element signature="method#Game#0;class#Game#0" expanded="false" />
-            <element signature="method#main#0;class#Game#0" expanded="false" />
             <element signature="method#init#0;class#Game#0" expanded="false" />
             <element signature="method#createTexture#0;class#Game#0" expanded="false" />
             <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
@@ -548,7 +545,6 @@
             <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
             <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
-            <element signature="method#run#0;class#Game#0" expanded="false" />
             <element signature="class#GAME_STATES#0;class#Game#0" expanded="false" />
           </folding>
         </state>
@@ -614,13 +610,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_111/jre/lib/rt.jar!/sun/awt/windows/WComponentPeer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="623">
+          <caret line="248" column="0" lean-forward="false" selection-start-line="248" selection-start-column="0" selection-end-line="248" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="227" column="37" lean-forward="false" selection-start-line="227" selection-start-column="37" selection-end-line="227" selection-end-column="37" />
+        <state relative-caret-position="412">
+          <caret line="264" column="41" lean-forward="false" selection-start-line="264" selection-start-column="41" selection-end-line="264" selection-end-column="41" />
           <folding>
             <element signature="method#Game#0;class#Game#0" expanded="false" />
-            <element signature="method#main#0;class#Game#0" expanded="false" />
             <element signature="method#init#0;class#Game#0" expanded="false" />
             <element signature="method#createTexture#0;class#Game#0" expanded="false" />
             <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
@@ -634,7 +637,6 @@
             <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
             <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
-            <element signature="method#run#0;class#Game#0" expanded="false" />
             <element signature="class#GAME_STATES#0;class#Game#0" expanded="false" />
           </folding>
         </state>
