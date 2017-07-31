@@ -121,6 +121,22 @@ public class Game extends JFrame implements KeyListener {
         }
     }
 
+    public Image loadTextureGif(String filepath){
+        try{
+            return new ImageIcon(new File(filepath).toURI().toURL()).getImage();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void movement(Vector v, Vector a,Vector p, float dt){
+        v.add(Vector.mult(a, dt));
+        v.mult(friction);
+        p.add(Vector.mult(v, dt));
+
+    }
+
     /*
      * update()
      * updates all relevant game variables before the frame draws
@@ -151,31 +167,23 @@ public class Game extends JFrame implements KeyListener {
                 }
                 a2 = Vector.unit2D((float) Math.toRadians(randomNum * randomNum2));
                 a2.mult(push * 5);
-
+                randomNum = (int) (Math.random() - .5 + 10);
+                randomNum2 = (int) (Math.random() * 360);
                 a6 = Vector.unit2D((float) Math.toRadians(randomNum * randomNum2));
                 a6.mult(push * 5);
 
 
                 // v+= a *dt;
                 // p += v* dt;
-                v.add(Vector.mult(a, dt));
-                v2.add(Vector.mult(a2, dt));
+               // v.add(Vector.mult(a, dt));
+               // v.mult(friction);
+                // p.add(Vector.mult(v, dt));
 
-                p2.add(Vector.mult(v2, dt));
+                movement(v,a,p,dt);
 
-                v6.add(Vector.mult(a6, dt));
+                movement(v2,a2,p2,dt);
 
-                p6.add(Vector.mult(v6, dt));
-
-                v.mult(friction);
-                v2.mult(friction);
-
-
-                p.add(Vector.mult(v, dt));
-                p2.add(Vector.mult(v2, dt));
-
-                p6.add(Vector.mult(v6, dt));
-
+                movement(v6,a6,p6,dt);
 
                 //following ai
 
@@ -217,6 +225,7 @@ public class Game extends JFrame implements KeyListener {
             v.setX(v.x * -1);
             a.setX(a.x * -1);
             a = new Vector(0, 0);
+            p.add(Vector.mult(v,dt));
         }
 
         if (p.y + sz > HEIGHT - 14 || p.y < 31) {
@@ -250,95 +259,68 @@ public class Game extends JFrame implements KeyListener {
             v6.setY(v6.y * -1);
             a6 = new Vector(0, 0);
         }
+
     }
 
     private void movePoints() {
         p3 = new Vector(randomNum3, randomNum4);
     }
 
-    private void blockCollision() {
+    private void blockCollision()
+    {
 
-        //checks if player collides with yellow block
+        //fly
         if (checkCollision(p.x, p2.x, p.y, p2.y, sz, sz2)) {
             GameState = GAME_STATES.SCORE;
         }
+        //red
+        if (checkCollision(p.x, p4.x, p.y, p4.y, sz, sz4)&& points >11) {
+            GameState = GAME_STATES.SCORE;
+        }
+        //fly2
+        if (checkCollision(p6.x, p.x, p6.y, p.y, sz6, sz)&& points >21) {
+            GameState = GAME_STATES.SCORE;
+        }
 
-        if (checkCollision(p.x, p4.x, p.y, p4.y, sz, sz4)) {
+        //pink green
+        if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5)&&points>16) {
             GameState = GAME_STATES.SCORE;
         }
         //checks if fly collides with white block
         if (checkCollision(p2.x, p3.x, p2.y, p3.y, sz2, sz3)) {
-            v2.setY(v2.y * -1);
-            v2.setX(v2.x * -1);
-            a2 = new Vector(0, 0);
-        }
-        // fly + red
-        if (checkCollision(p4.x, p2.x, p4.y, p2.y, sz4, sz2)) {
-
-            v2.setY(v2.y * -1);
-            v2.setX(v2.x * -1);
-            a2 = new Vector(0, 0);
-            p2.add(Vector.mult(v2, dt * 3));
-        }
-      //fly + fly2
-        if (checkCollision(p6.x, p2.x, p6.y, p2.y, sz6, sz2)) {
-
-            v2.setY(v2.y * -1);
-            v2.setX(v2.x * -1);
-            a2 = new Vector(0, 0);
-            p2.add(Vector.mult(v2, dt * 3));
+            movePoints();
+            points--;
+            sz2 += 5;
         }
 
 
-        // fly 2
-        if (checkCollision(p6.x, p3.x, p6.y, p3.y, sz6, sz3)) {
-            v6.setY(v6.y * -1);
-            v6.setX(v6.x * -1);
-            a6 = new Vector(0, 0);
-        }
-       //fly 2
-        if (checkCollision(p4.x, p6.x, p4.y, p6.y, sz4, sz6)) {
-
-            v6.setY(v2.y * -1);
-            v6.setX(v2.x * -1);
-            a6 = new Vector(0, 0);
-            p6.add(Vector.mult(v2, dt * 15));
-        }
-
-        // checks if white and GReen blocks collide
+        //checks if white and GReen blocks collide
         if (checkCollision(p.x, p3.x, p.y, p3.y, sz, sz3)) {
             points++;
             movePoints();
         }
+
         // White + red
-        if (checkCollision(p4.x, p3.x, p4.y, p3.y, sz4, sz3)) {
+        if (checkCollision(p4.x, p3.x, p4.y, p3.y, sz4, sz3)&& points>=11) {
             movePoints();
             points--;
-            sz4 += 15;
+            sz4 += 5;
+        }
 
-            //white pink
-            if (checkCollision(p5.x, p3.x, p5.y, p3.y, sz5, sz3)) {
-                movePoints();
-                points--;
-                v5.mult(1.2f);
-            }
+        // White + Pink
+        if (checkCollision(p5.x, p3.x, p5.y, p3.y, sz5, sz3)&& points>=16) {
+            movePoints();
+            points--;
+            sz5 += 5;
+        }
 
-            //red pink
-            if (checkCollision(p5.x, p4.x, p5.y, p4.y, sz5, sz4)) {
-                v5.setY(v5.y * -1);
-                v5.setX(v5.x * -1);
-                a5 = new Vector(0, 0);
-                p5.add(Vector.mult(v5, dt * 3));
-            }
-            //pink green
-            if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5)) {
-                GameState = GAME_STATES.SCORE;
-            }
+
 
         }
 
 
-    }
+
+
 
     private boolean checkCollision(float x, float x2, float y, float y2, int sz, int sz2) {
 
@@ -385,21 +367,31 @@ public class Game extends JFrame implements KeyListener {
                 g.fillRect(p2.ix, p2.iy, sz2, sz2);
 
                 //points
-                g.setColor(Color.WHITE);
-                g.fillRect(p3.ix, p3.iy, sz3, sz3);
+                Image sprite = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\spincoin.gif");
 
-                //tracking
-                g.setColor(Color.RED);
-                g.fillRect(p4.ix, p4.iy, sz4, sz4);
 
-                //predicting
-                g.setColor(Color.PINK);
-                g.fillRect(p5.ix, p5.iy, sz5, sz5);
+                g.drawImage(sprite, p3.ix,p3.iy,sz3,sz3,null);
 
-                //
-                g.setColor(Color.BLACK);
-                g.fillRect(p6.ix, p6.iy, sz6, sz6);
 
+
+
+                if(points>=10) {
+                     //tracking
+                     g.setColor(Color.RED);
+                     g.fillRect(p4.ix, p4.iy, sz4, sz4);
+                }
+
+              if(points>=15) {
+                  //predicting
+                  g.setColor(Color.PINK);
+                  g.fillRect(p5.ix, p5.iy, sz5, sz5);
+              }
+
+               if(points>=20) {
+                   //fly2
+                   g.setColor(Color.BLACK);
+                   g.fillRect(p6.ix, p6.iy, sz6, sz6);
+               }
 
                 //Roof + Floor
                 g.setColor(Color.YELLOW);
