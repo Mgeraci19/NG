@@ -596,7 +596,8 @@ public class Game extends JFrame implements KeyListener {
     enum GAME_STATES {
         MENU,
         PLAY,
-        SCORE;
+
+        SCORE
     }
 
 }

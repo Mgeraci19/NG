@@ -16,16 +16,16 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="264" column="41" lean-forward="false" selection-start-line="264" selection-start-column="41" selection-end-line="264" selection-end-column="41" />
+            <state relative-caret-position="1088">
+              <caret line="148" column="0" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
               <folding>
-                <element signature="method#Game#0;class#Game#0" expanded="false" />
+                <element signature="imports" expanded="true" />
                 <element signature="method#init#0;class#Game#0" expanded="false" />
                 <element signature="method#createTexture#0;class#Game#0" expanded="false" />
                 <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
                 <element signature="method#movement#0;class#Game#0" expanded="false" />
-                <element signature="method#update#0;class#Game#0" expanded="false" />
                 <element signature="method#setCooldown#0;class#Game#0" expanded="false" />
+                <element signature="method#wallCollision#0;class#Game#0" expanded="false" />
                 <element signature="method#blockCollision#0;class#Game#0" expanded="false" />
                 <element signature="method#checkCollision#0;class#Game#0" expanded="false" />
                 <element signature="method#draw#0;class#Game#0" expanded="false" />
@@ -33,7 +33,6 @@
                 <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
                 <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
                 <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
-                <element signature="class#GAME_STATES#0;class#Game#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -490,12 +489,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>39</line>
-          <properties />
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Game.java</url>
           <line>285</line>
           <properties />
           <option name="timeStamp" value="21" />
@@ -508,16 +501,8 @@
           </properties>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/Game.java</url>
-          <line>288</line>
-          <properties class="Game" method="blockCollision">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="25" />
+      <option name="time" value="26" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -531,13 +516,13 @@
         <state relative-caret-position="340">
           <caret line="20" column="26" lean-forward="true" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
           <folding>
-            <element signature="method#Game#0;class#Game#0" expanded="false" />
+            <element signature="imports" expanded="true" />
             <element signature="method#init#0;class#Game#0" expanded="false" />
             <element signature="method#createTexture#0;class#Game#0" expanded="false" />
             <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
             <element signature="method#movement#0;class#Game#0" expanded="false" />
-            <element signature="method#update#0;class#Game#0" expanded="false" />
             <element signature="method#setCooldown#0;class#Game#0" expanded="false" />
+            <element signature="method#wallCollision#0;class#Game#0" expanded="false" />
             <element signature="method#blockCollision#0;class#Game#0" expanded="false" />
             <element signature="method#checkCollision#0;class#Game#0" expanded="false" />
             <element signature="method#draw#0;class#Game#0" expanded="false" />
@@ -545,7 +530,6 @@
             <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
             <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
-            <element signature="class#GAME_STATES#0;class#Game#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -618,18 +602,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Textures/spincoin.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="264" column="41" lean-forward="false" selection-start-line="264" selection-start-column="41" selection-end-line="264" selection-end-column="41" />
+        <state relative-caret-position="1088">
+          <caret line="148" column="0" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
           <folding>
-            <element signature="method#Game#0;class#Game#0" expanded="false" />
+            <element signature="imports" expanded="true" />
             <element signature="method#init#0;class#Game#0" expanded="false" />
             <element signature="method#createTexture#0;class#Game#0" expanded="false" />
             <element signature="method#loadTextureGif#0;class#Game#0" expanded="false" />
             <element signature="method#movement#0;class#Game#0" expanded="false" />
-            <element signature="method#update#0;class#Game#0" expanded="false" />
             <element signature="method#setCooldown#0;class#Game#0" expanded="false" />
+            <element signature="method#wallCollision#0;class#Game#0" expanded="false" />
             <element signature="method#blockCollision#0;class#Game#0" expanded="false" />
             <element signature="method#checkCollision#0;class#Game#0" expanded="false" />
             <element signature="method#draw#0;class#Game#0" expanded="false" />
@@ -637,7 +626,6 @@
             <element signature="method#keyTyped#0;class#Game#0" expanded="false" />
             <element signature="method#keyPressed#0;class#Game#0" expanded="false" />
             <element signature="method#keyReleased#0;class#Game#0" expanded="false" />
-            <element signature="class#GAME_STATES#0;class#Game#0" expanded="false" />
           </folding>
         </state>
       </provider>
