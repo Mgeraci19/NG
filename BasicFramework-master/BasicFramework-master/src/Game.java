@@ -107,11 +107,11 @@ public class Game extends JFrame implements KeyListener {
         push = 100;
         cooldown = 1200;
         sz = 70;
-        sz2 = 15;
+        sz2 = 25;
         sz3 = 40;
         sz4 = 70;
         sz5 = 40;
-        sz6 = 30;
+        sz6 = 60;
         sz7 = 30;
         c= 0;
 
@@ -384,9 +384,10 @@ public class Game extends JFrame implements KeyListener {
                 g.fillRect(0, 0, WIDTH, HEIGHT);
 
 
-                g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\Game Over.jpg"), 0, 0, WIDTH, HEIGHT, null);
+                Image firstbackground = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\pixel_waterfall.gif");
+                g.drawImage(firstbackground, 0,0,WIDTH,HEIGHT,null);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
-                g.setColor(Color.WHITE);
+                g.setColor(Color.BLACK);
 
                 g.drawString("Press ENTER to play", 50, 550);
 
@@ -411,8 +412,8 @@ public class Game extends JFrame implements KeyListener {
 
 
                 //random
-                g.setColor(Color.BLACK);
-                g.fillRect(p2.ix, p2.iy, sz2, sz2);
+                Image bird = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\fly.png");
+                g.drawImage(bird, p2.ix,p2.iy,sz2,sz2,null);
 
                 //points
                 Image sprite = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\spincoin.gif");
@@ -443,8 +444,11 @@ public class Game extends JFrame implements KeyListener {
 
                if(points>=20) {
                    //fly2
-                   g.setColor(Color.BLACK);
-                   g.fillRect(p6.ix, p6.iy, sz6, sz6);
+                   Image eagle = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\eagle.gif");
+
+
+                   g.drawImage(eagle, p6.ix,p6.iy,sz6,sz6,null);
+
                }
 
                 //Roof + Floor
