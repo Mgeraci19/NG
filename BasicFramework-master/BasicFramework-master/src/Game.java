@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//todo wanderer wall collision
+//todo wanderer wall collision make flashing sprites endgame/ endgame screen
 public class Game extends JFrame implements KeyListener {
 
     //window vars
