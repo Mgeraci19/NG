@@ -104,7 +104,7 @@ public class Game extends JFrame implements KeyListener {
         a7 = new Vector(10, 10);
 
         push = 100;
-        cooldown = 1200;
+        cooldown = 100;
         sz = 70;
         sz2 = 25;
         sz3 = 40;
@@ -227,23 +227,23 @@ public class Game extends JFrame implements KeyListener {
 
 
     private void setCooldown() {
-        if (cooldown >= 12 && spacePressed) {
-            cooldown -= 12;
-        } else if (cooldown < 1200 && !spacePressed) {
-            cooldown += 12;
+        if (cooldown >= 1 && spacePressed) {
+            cooldown -= 1;
+        } else if (cooldown < 100 && !spacePressed) {
+            cooldown += 1;
         }
     }
 
     private void wallCollision() {
         // makes player bounce if they touch the wall
-        if (p.x + sz > WIDTH - 14 || p.x < 17) {
+        if (p.x + sz > WIDTH  || p.x < 0) {
             v.setX(v.x * -1);
             a.setX(a.x * -1);
             a = new Vector(0, 0);
             p.add(Vector.mult(v,dt));
         }
 
-        if (p.y + sz > HEIGHT - 14 || p.y < 31) {
+        if (p.y + sz > HEIGHT  || p.y < 30) {
             v.setY(v.y * -1);
             a.setY(a.y * -1);
             a = new Vector(0, 0);
@@ -252,39 +252,39 @@ public class Game extends JFrame implements KeyListener {
 
 
         // makes block bounce off walls
-        if (p2.x + sz2 > WIDTH - 14 || p2.x < 17) {
+        if (p2.x + sz2 > WIDTH  || p2.x < 0) {
             v2.setX(v2.x * -1);
             a2.setX(a2.x * -1);
             a2 = new Vector(0, 0);
         }
 
-        if (p2.y + sz2 > HEIGHT - 14 || p2.y < 31) {
+        if (p2.y + sz2 > HEIGHT || p2.y < 14) {
 
             v2.setY(v2.y * -1);
             a2 = new Vector(0, 0);
         }
         //wander
-        if (p7.y + sz7 > HEIGHT - 14 || p7.y < 31) {
+        if (p7.y + sz7 > HEIGHT  || p7.y < 14) {
 
             v7.setY(v2.y * -1);
             a7= new Vector(0, 0);
-            p7.add(Vector.mult(v7,dt*3));
+            p7.add(Vector.mult(v7,dt*15));
         }
 
-        if (p7.x + sz7 > WIDTH - 14 || p7.x < 17) {
+        if (p7.x + sz7 > WIDTH || p7.x < 0) {
             v7.setX(v7.x * -1);
             a7.setX(a7.x * -1);
             a7 = new Vector(0, 0);
-            p7.add(Vector.mult(v7,dt*3));
+            p7.add(Vector.mult(v7,dt*15));
         }
 
-        if (p6.x + sz6 > WIDTH - 14 || p6.x < 17) {
+        if (p6.x + sz6 > WIDTH  || p6.x <0) {
             v6.setX(v6.x * -1);
             a6.setX(a6.x * -1);
             a6= new Vector(0, 0);
         }
 
-        if (p6.y + sz6 > HEIGHT - 14 || p6.y < 31) {
+        if (p6.y + sz6 > HEIGHT  || p6.y < 14) {
 
             v6.setY(v6.y * -1);
             a6 = new Vector(0, 0);
@@ -383,6 +383,8 @@ public class Game extends JFrame implements KeyListener {
                 g.fillRect(0, 0, WIDTH, HEIGHT);
 
 
+
+
                 Image firstbackground = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\pixel_waterfall.gif");
                 g.drawImage(firstbackground, 0,0,WIDTH,HEIGHT,null);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
@@ -397,7 +399,12 @@ public class Game extends JFrame implements KeyListener {
                 Image background = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\pixel_waterfall.gif");
                 g.drawImage(background, 0,0,WIDTH,HEIGHT,null);
 
+                g.setColor(Color.GREEN);
+                g.drawRect(350,30 , 450,40 );
 
+
+                g.setColor(Color.GREEN);
+                g.fillRect(350,30 , (cooldown*9)/2,40 );
 
                 //player
                 if(!right) {
@@ -450,24 +457,12 @@ public class Game extends JFrame implements KeyListener {
 
                }
 
-                //Roof + Floor
-                g.setColor(Color.YELLOW);
-                g.fillRect(0, 0, WIDTH, 34);
 
-                g.setColor(Color.YELLOW);
-                g.fillRect(0, 686, WIDTH, 1080);
-                // Walls
-                g.setColor(Color.YELLOW);
-                g.fillRect(0, 0, 16, HEIGHT);
-
-                g.setColor(Color.YELLOW);
-                g.fillRect(1066, 0, 1080, HEIGHT);
 
 
                 //draw fps
                 g.setColor(Color.GREEN);
                 g.drawString(Long.toString(fps), 10, 40);
-                g.drawString(Long.toString(cooldown), 540, 50);
                 g.drawString(Long.toString(points), 900, 50);
                 //release resources, show the buffer
                 break;
@@ -476,12 +471,13 @@ public class Game extends JFrame implements KeyListener {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, WIDTH, HEIGHT);
 
+                g.drawString(Long.toString(points), 900, 50);
 
-                g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\Game Over.jpg"), 0, 0, WIDTH, HEIGHT, null);
+                g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\Game Over .png"), 0, 0, WIDTH, HEIGHT, null);
 
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-                g.setColor(Color.WHITE);
-                g.drawString("Press R to restart", 200, 550);
+                g.setColor(Color.BLACK);
+                g.drawString("Press R to restart", 330, 550);
                 break;
         }
 
