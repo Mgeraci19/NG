@@ -19,7 +19,7 @@ public class Game extends JFrame implements KeyListener {
     public GAME_STATES GameState = GAME_STATES.MENU;
     Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7;
    // final float T = 10f;
-    float friction, push,k=100f,rad = 1000;
+    float friction, push,k=100f,rad = 100;
     int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7;
     int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c;
     private boolean accelerating = false,right;
@@ -84,7 +84,7 @@ public class Game extends JFrame implements KeyListener {
         p4 = new Vector(100, 600);
         p5 = new Vector(700, 30);
         p6 = new Vector(500, 100);
-        p7 = new Vector(40, 200);
+        p7 = new Vector(400, 500);
 
 
         v = new Vector(0, 0);
@@ -191,17 +191,12 @@ public class Game extends JFrame implements KeyListener {
                 movement(v6,a6,p6,dt);
 
                 //wander
-                if(points>=5) {
-                   // v7 = Vector.mult(Vector.unit2D(v7.dir()), 1f);
-                    if(c== 0) {
-                        v7.add(Vector.mult(Vector.random2D(), rad));
-                        v7.setMag(100);
-                        c= 60;
-                        System.out.println(v7.x + " " + v7.y);
-                    }
-                    c--;
-                    p7.add(Vector.mult(v7, dt));
-                }
+
+                v7 = Vector.sub(p,Vector.add(p7,Vector.mult(v,50f)));
+                v7.setMag(50);
+                v7.add(Vector.mult(a7, dt));
+                p7.add(Vector.mult(v7, dt));
+
 
 
 
@@ -218,6 +213,7 @@ public class Game extends JFrame implements KeyListener {
                 v5.setMag(50);
                 v5.add(Vector.mult(a5, dt));
                 p5.add(Vector.mult(v5, dt));
+
 
                 accelerating = false;
                 spacePressed = false;
@@ -264,18 +260,19 @@ public class Game extends JFrame implements KeyListener {
             a2 = new Vector(0, 0);
         }
         //wander
-        if (p7.y + sz7 > HEIGHT  || p7.y < 14) {
+        if (p7.y + sz7 > HEIGHT || p7.y<25) {
 
             v7.setY(v2.y * -1);
+            a7.setY(a7.y * -1);
             a7= new Vector(0, 0);
-            p7.add(Vector.mult(v7,dt*15));
+            p7.add(Vector.mult(v7,dt*3));
         }
 
         if (p7.x + sz7 > WIDTH || p7.x < 0) {
             v7.setX(v7.x * -1);
             a7.setX(a7.x * -1);
             a7 = new Vector(0, 0);
-            p7.add(Vector.mult(v7,dt*15));
+            p7.add(Vector.mult(v7,dt*3));
         }
 
         if (p6.x + sz6 > WIDTH  || p6.x <0) {
