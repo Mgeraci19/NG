@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//todo wanderer wall collision make flashing sprites endgame/ endgame screen
+//todo make flashing sprites endgame/ endgame screen
 public class Game extends JFrame implements KeyListener {
 
     //window vars
@@ -105,7 +105,7 @@ public class Game extends JFrame implements KeyListener {
 
         push = 100;
         cooldown = 100;
-        sz = 70;
+        sz = 150;
         sz2 = 25;
         sz3 = 40;
         sz4 = 70;
@@ -210,7 +210,7 @@ public class Game extends JFrame implements KeyListener {
 
                 //[redicting ai
                 v5 = Vector.sub(p3,Vector.add(p5,Vector.mult(v,.25f)));
-                v5.setMag(50);
+                v5.setMag(25);
                 v5.add(Vector.mult(a5, dt));
                 p5.add(Vector.mult(v5, dt));
 
@@ -321,7 +321,7 @@ public class Game extends JFrame implements KeyListener {
         if (checkCollision(p2.x, p3.x, p2.y, p3.y, sz2, sz3)) {
             movePoints();
             points--;
-            sz2 += 5;
+            sz2 += 30;
         }
 
 
@@ -329,20 +329,21 @@ public class Game extends JFrame implements KeyListener {
         if (checkCollision(p.x, p3.x, p.y, p3.y, sz, sz3)) {
             points++;
             movePoints();
+            sz-=5;
         }
 
         // White + red
         if (checkCollision(p4.x, p3.x, p4.y, p3.y, sz4, sz3)&& points>=11) {
             movePoints();
             points--;
-            sz4 += 5;
+            sz4 += 30;
         }
 
         // White + Pink
         if (checkCollision(p5.x, p3.x, p5.y, p3.y, sz5, sz3)&& points>=16) {
             movePoints();
             points--;
-            sz5 += 5;
+            sz5 += 30 ;
         }
 
 
@@ -590,7 +591,7 @@ public class Game extends JFrame implements KeyListener {
         * updates all timing variables and then calls update() and draw()
         * dynamically sleeps the main thread to maintain a framerate close to target fps
      */
-    public void run() {
+     public void run() {
         init();
 
         while (isRunning) {
