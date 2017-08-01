@@ -109,7 +109,7 @@ public class Game extends JFrame implements KeyListener {
         sz2 = 25;
         sz3 = 40;
         sz4 = 70;
-        sz5 = 40;
+        sz5 = 65;
         sz6 = 60;
         sz7 = 30;
         c= 0;
@@ -268,14 +268,14 @@ public class Game extends JFrame implements KeyListener {
 
             v7.setY(v2.y * -1);
             a7= new Vector(0, 0);
-            p7.add(Vector.mult(v7,dt));
+            p7.add(Vector.mult(v7,dt*3));
         }
 
         if (p7.x + sz7 > WIDTH - 14 || p7.x < 17) {
             v7.setX(v7.x * -1);
             a7.setX(a7.x * -1);
             a7 = new Vector(0, 0);
-            p7.add(Vector.mult(v7,dt));
+            p7.add(Vector.mult(v7,dt*3));
         }
 
         if (p6.x + sz6 > WIDTH - 14 || p6.x < 17) {
@@ -425,20 +425,20 @@ public class Game extends JFrame implements KeyListener {
 
                 if(points>=10) {
                      //tracking
-                     g.setColor(Color.RED);
-                     g.fillRect(p4.ix, p4.iy, sz4, sz4);
+                    Image helicopter = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3.png");
+                    g.drawImage(helicopter, p4.ix,p4.iy,sz4,sz4,null);
                 }
 
                 if(points>=5) {
                     //tracking
-                    g.setColor(Color.ORANGE);
-                    g.fillRect(p7.ix, p7.iy, sz7, sz7);
+                    Image owl = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\owl.png");
+                    g.drawImage(owl, p7.ix,p7.iy,sz7,sz7,null);
                 }
 
               if(points>=15) {
                   //predicting
-                  g.setColor(Color.PINK);
-                  g.fillRect(p5.ix, p5.iy, sz5, sz5);
+                  Image dragon = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\dragon.png");
+                  g.drawImage(dragon, p5.ix,p5.iy,sz5,sz5,null);
               }
 
                if(points>=20) {
