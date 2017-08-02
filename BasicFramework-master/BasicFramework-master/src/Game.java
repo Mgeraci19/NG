@@ -104,8 +104,8 @@ public class Game extends JFrame implements KeyListener {
 
         push = 100;
         cooldown = 100;
-        sz = 150;
-        sz2 = 25;
+        sz = 110;
+        sz2 = 80;
         sz3 = 40;
         sz4 = 70;
         sz5 = 65;
@@ -255,7 +255,7 @@ public class Game extends JFrame implements KeyListener {
             a2 = new Vector(0, 0);
         }
 
-        if (p2.y + sz2 > HEIGHT || p2.y < 14) {
+        if (p2.y + sz2 > HEIGHT || p2.y < 500) {
 
             v2.setY(v2.y * -1);
             a2 = new Vector(0, 0);
@@ -387,9 +387,21 @@ public class Game extends JFrame implements KeyListener {
 
                 Image backgroundF = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\background.png");
                 g.drawImage(backgroundF ,0,0 ,WIDTH,HEIGHT,null);
+
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                g.setColor(Color.RED);
+                g.drawString("Press 1 to decrease size (5pts)", 20, 80);
+
+                g.setColor(Color.RED);
+                g.drawString("Press 2 to increase speed boost length (5pts)", 20, 160);
+
+                g.setColor(Color.RED);
+                g.drawString("Press 3 to become invincible for 3 seconds (5pts)", 20, 240);
+
+                g.setColor(Color.RED);
+                g.drawString("Press 4 to fire a missile at the enemy helicopter (5pts)", 20, 320);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
                 g.setColor(Color.BLACK);
-
                 g.drawString("Press ENTER to play", 50, 550);
 
                 break;
@@ -418,9 +430,10 @@ public class Game extends JFrame implements KeyListener {
 
 
                 //random
-                Image bird = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\fly.png");
-                g.drawImage(bird, p2.ix,p2.iy,sz2,sz2,null);
+                Image crab = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\crab.gif");
 
+
+                g.drawImage(crab, p2.ix,p2.iy,sz2,sz2 ,null);
                 //points
                 Image sprite = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\spincoin.gif");
 
@@ -441,11 +454,11 @@ public class Game extends JFrame implements KeyListener {
                 }
 
                 if(points>=5) {
-                    Image owlN = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\owlnd.png");
+                    Image owlN = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\airballonng.png");
                     g.drawImage(owlN, p7.ix, p7.iy, sz7, sz7, null);
                    if(points>= 7) {
                        //tracking
-                       Image owl = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\owl.png");
+                       Image owl = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\airballon.png");
                        g.drawImage(owl, p7.ix, p7.iy, sz7, sz7, null);
                    }
                 }
@@ -507,7 +520,7 @@ public class Game extends JFrame implements KeyListener {
                 }
                 g.setColor(Color.GREEN);
                 g.drawString("Score:", 330, 450);
-                g.setColor(Color.BLACK);
+                g.setColor(Color.GREEN);
                 g.drawString(Long.toString(points), 490, 450);
                 break;
         }
@@ -553,14 +566,14 @@ public class Game extends JFrame implements KeyListener {
                             a = Vector.unit2D((float) Math.toRadians(180));
                             a.mult(push);
                             accelerating = true;
-                            right=false;
+                            right=true;
                             break;
 
                         case KeyEvent.VK_RIGHT:
                             a = Vector.unit2D((0));
                             a.mult(push);
                             accelerating = true;
-                            right = true;
+                            right = false;
                             break;
 
                         case KeyEvent.VK_SPACE:
