@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//todo make flashing sprites endgame/ endgame screen
+//todo  endgame/ endgame screen(30min)  || upgrade system instead of size decrement every coin(1 hour)
 public class Game extends JFrame implements KeyListener {
 
     //window vars
@@ -19,9 +19,9 @@ public class Game extends JFrame implements KeyListener {
     public GAME_STATES GameState = GAME_STATES.MENU;
     Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7;
    // final float T = 10f;
-    float friction, push,k=100f,rad = 100;
+    float friction, push;
     int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7;
-    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c;
+    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c,coins,counter,counter2;
     private boolean accelerating = false,right;
     private boolean spacePressed;
     //double buffer strategy
@@ -73,8 +73,7 @@ public class Game extends JFrame implements KeyListener {
         addKeyListener(this);
         setFocusable(true);
 
-        //set background window color
-        setBackground(Color.DARK_GRAY);
+
 
 
         points = 0;
@@ -113,6 +112,10 @@ public class Game extends JFrame implements KeyListener {
         sz6 = 60;
         sz7 = 30;
         c= 0;
+        coins=0;
+        points=0;
+        counter=0;
+        counter2=0;
 
 
     }
@@ -160,6 +163,7 @@ public class Game extends JFrame implements KeyListener {
             case MENU:
 
             case SCORE:
+                counter++;
                 break;
             case PLAY:
 
@@ -178,11 +182,7 @@ public class Game extends JFrame implements KeyListener {
                 a6.mult(push * 5);
 
 
-                // v+= a *dt;
-                // p += v* dt;
-               // v.add(Vector.mult(a, dt));
-               // v.mult(friction);
-                // p.add(Vector.mult(v, dt));
+
 
                 movement(v,a,p,dt);
 
@@ -217,6 +217,7 @@ public class Game extends JFrame implements KeyListener {
 
                 accelerating = false;
                 spacePressed = false;
+
 
         }
     }
@@ -301,20 +302,20 @@ public class Game extends JFrame implements KeyListener {
             GameState = GAME_STATES.SCORE;
         }
         //red
-        if (checkCollision(p.x, p4.x, p.y, p4.y, sz, sz4)&& points >11) {
+        if (checkCollision(p.x, p4.x, p.y, p4.y, sz, sz4)&& points >=12) {
             GameState = GAME_STATES.SCORE;
         }
         //fly2
-        if (checkCollision(p6.x, p.x, p6.y, p.y, sz6, sz)&& points >21) {
+        if (checkCollision(p6.x, p.x, p6.y, p.y, sz6, sz)&& points >=22) {
             GameState = GAME_STATES.SCORE;
         }
 
         //pink green
-        if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5)&&points>16) {
+        if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5)&&points>=17) {
         GameState = GAME_STATES.SCORE;
     }
 
-        if (checkCollision(p.x, p7.x, p.y, p7.y, sz, sz7)&&points>=6) {
+        if (checkCollision(p.x, p7.x, p.y, p7.y, sz, sz7)&&points>=7) {
             GameState = GAME_STATES.SCORE;
         }
         //checks if fly collides with white block
@@ -328,8 +329,9 @@ public class Game extends JFrame implements KeyListener {
         //checks if white and GReen blocks collide
         if (checkCollision(p.x, p3.x, p.y, p3.y, sz, sz3)) {
             points++;
+            coins++;
             movePoints();
-            sz-=5;
+
         }
 
         // White + red
@@ -383,8 +385,8 @@ public class Game extends JFrame implements KeyListener {
 
 
 
-                Image firstbackground = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\pixel_waterfall.gif");
-                g.drawImage(firstbackground, 0,0,WIDTH,HEIGHT,null);
+                Image backgroundF = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\background.png");
+                g.drawImage(backgroundF ,0,0 ,WIDTH,HEIGHT,null);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
                 g.setColor(Color.BLACK);
 
@@ -394,8 +396,8 @@ public class Game extends JFrame implements KeyListener {
             case PLAY:
                 g.clearRect(0, 0, WIDTH, HEIGHT);
 
-                Image background = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\pixel_waterfall.gif");
-                g.drawImage(background, 0,0,WIDTH,HEIGHT,null);
+                Image background = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\background.png");
+                g.drawImage(background ,0,0 ,WIDTH,HEIGHT,null);
 
                 g.setColor(Color.GREEN);
                 g.drawRect(350,30 , 450,40 );
@@ -429,29 +431,47 @@ public class Game extends JFrame implements KeyListener {
 
 
                 if(points>=10) {
-                     //tracking
-                    Image helicopter = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3.png");
-                    g.drawImage(helicopter, p4.ix,p4.iy,sz4,sz4,null);
+                    Image helicopter = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3nd.png");
+                    g.drawImage(helicopter, p4.ix, p4.iy, sz4, sz4, null);
+                    if(points>11) {
+                        //tracking
+                        Image helicopterR = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3.png");
+                        g.drawImage(helicopterR, p4.ix, p4.iy, sz4, sz4, null);
+                    }
                 }
 
                 if(points>=5) {
-                    //tracking
-                    Image owl = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\owl.png");
-                    g.drawImage(owl, p7.ix,p7.iy,sz7,sz7,null);
+                    Image owlN = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\owlnd.png");
+                    g.drawImage(owlN, p7.ix, p7.iy, sz7, sz7, null);
+                   if(points>= 7) {
+                       //tracking
+                       Image owl = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\owl.png");
+                       g.drawImage(owl, p7.ix, p7.iy, sz7, sz7, null);
+                   }
                 }
 
               if(points>=15) {
-                  //predicting
-                  Image dragon = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\dragon.png");
-                  g.drawImage(dragon, p5.ix,p5.iy,sz5,sz5,null);
+                  Image dragonN = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\dragonnd.png");
+                  g.drawImage(dragonN, p5.ix, p5.iy, sz5, sz5, null);
+                    if(points>=17) {
+                        //predicting
+                        Image dragon = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\dragon.png");
+                        g.drawImage(dragon, p5.ix, p5.iy, sz5, sz5, null);
+                    }
               }
 
                if(points>=20) {
-                   //fly2
-                   Image eagle = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\eagle.gif");
+                   Image eagleN = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\eagleng.gif");
 
 
-                   g.drawImage(eagle, p6.ix,p6.iy,sz6,sz6,null);
+                   g.drawImage(eagleN, p6.ix, p6.iy, sz6, sz6, null);
+                    if(points>=22) {
+                        //fly2
+                        Image eagle = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\eagle.gif");
+
+
+                        g.drawImage(eagle, p6.ix, p6.iy, sz6, sz6, null);
+                    }
 
                }
 
@@ -461,7 +481,10 @@ public class Game extends JFrame implements KeyListener {
                 //draw fps
                 g.setColor(Color.GREEN);
                 g.drawString(Long.toString(fps), 10, 40);
-                g.drawString(Long.toString(points), 900, 50);
+                g.drawString(Long.toString(coins), 950, 50);
+                g.setColor(Color.BLACK);
+                g.drawString(("Points:"), 20, 65);
+                g.drawString(Long.toString(points), 60, 65);
                 //release resources, show the buffer
                 break;
             case SCORE:
@@ -469,13 +492,23 @@ public class Game extends JFrame implements KeyListener {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, WIDTH, HEIGHT);
 
-                g.drawString(Long.toString(points), 900, 50);
 
-                g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\Game Over .png"), 0, 0, WIDTH, HEIGHT, null);
 
+                g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\game over.png"), 0, 0, WIDTH, HEIGHT, null);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+
+               if (counter%40==0) {
+                   counter2++;
+
+               }
+                if(counter2%2==0) {
+                    g.setColor(Color.BLACK);
+                    g.drawString("Press R to restart", 330, 550);
+                }
+                g.setColor(Color.GREEN);
+                g.drawString("Score:", 330, 450);
                 g.setColor(Color.BLACK);
-                g.drawString("Press R to restart", 330, 550);
+                g.drawString(Long.toString(points), 490, 450);
                 break;
         }
 
@@ -536,10 +569,20 @@ public class Game extends JFrame implements KeyListener {
                                 a.mult(5);
 
                             }
+                            break;
+                        case KeyEvent.VK_Y:
+
+                            if (coins >= 5&& sz >15) {
+                             sz-=10;
+                            coins-=5;
+                            }
 
                             break;
+
+
                         case KeyEvent.VK_P:
                             points++;
+                            coins++;
 
 
                             break;
