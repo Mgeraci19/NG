@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//todo  endgame/ endgame screen(30min)  || upgrade system instead of size decrement every coin(1 hour)
+//todo  upgrade system(2 hours)
 public class Game extends JFrame implements KeyListener {
 
     //window vars
@@ -107,10 +107,10 @@ public class Game extends JFrame implements KeyListener {
         sz = 110;
         sz2 = 80;
         sz3 = 40;
-        sz4 = 70;
-        sz5 = 65;
+        sz4 = 110;
+        sz5 = 40;
         sz6 = 60;
-        sz7 = 30;
+        sz7 = 50;
         c= 0;
         coins=0;
         points=0;
@@ -399,7 +399,7 @@ public class Game extends JFrame implements KeyListener {
                 g.drawString("Press 3 to become invincible for 3 seconds (5pts)", 20, 240);
 
                 g.setColor(Color.RED);
-                g.drawString("Press 4 to fire a missile at the enemy helicopter (5pts)", 20, 320);
+                g.drawString("Press 4 to fire a harpoon at the shark (5pts)", 20, 320);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
                 g.setColor(Color.BLACK);
                 g.drawString("Press ENTER to play", 50, 550);
