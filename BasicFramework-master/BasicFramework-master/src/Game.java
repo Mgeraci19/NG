@@ -19,11 +19,11 @@ public class Game extends JFrame implements KeyListener {
     public GAME_STATES GameState = GAME_STATES.MENU;
     Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7;
    // final float T = 10f;
-    float friction, push;
-    int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7;
-    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c,coins,counter,counter2;
+    float friction, push,time;
+    int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7,coolRate;
+    int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c,coins,counter,counter2,cooldownMax,gCounter,iCounter;
     private boolean accelerating = false,right;
-    private boolean spacePressed;
+    private boolean spacePressed,invincible;
     //double buffer strategy
     private BufferStrategy strategy;
     private ArrayList<Integer> keys = new ArrayList<>();
@@ -103,7 +103,8 @@ public class Game extends JFrame implements KeyListener {
         a7 = new Vector(10, 10);
 
         push = 100;
-        cooldown = 100;
+        cooldown = 10;
+        cooldownMax = 10;
         sz = 110;
         sz2 = 80;
         sz3 = 40;
@@ -116,7 +117,10 @@ public class Game extends JFrame implements KeyListener {
         points=0;
         counter=0;
         counter2=0;
-
+        coolRate=0;
+        invincible=false;
+        time=0;
+        gCounter=0;
 
     }
 
@@ -166,7 +170,7 @@ public class Game extends JFrame implements KeyListener {
                 counter++;
                 break;
             case PLAY:
-
+                gCounter++;
                 setCooldown();
                 wallCollision();
                 blockCollision();
@@ -181,7 +185,12 @@ public class Game extends JFrame implements KeyListener {
                 a6 = Vector.unit2D((float) Math.toRadians(randomNum * randomNum2));
                 a6.mult(push * 5);
 
-
+                if(invincible){
+                    iCounter++;
+                    if(iCounter>=180){
+                        invincible=false;
+                    }
+                }
 
 
                 movement(v,a,p,dt);
@@ -203,7 +212,7 @@ public class Game extends JFrame implements KeyListener {
                 //following ai
 
                 v4 = Vector.sub(p, p4);
-                v4.setMag(100);
+                v4.setMag(75);
                 v4.add(Vector.mult(a, dt));
                 p4.add(Vector.mult(v4, dt));
 
@@ -226,8 +235,9 @@ public class Game extends JFrame implements KeyListener {
     private void setCooldown() {
         if (cooldown >= 1 && spacePressed) {
             cooldown -= 1;
-        } else if (cooldown < 100 && !spacePressed) {
-            cooldown += 1;
+        } else if (cooldown < cooldownMax&& !spacePressed) {
+           cooldown+=1;
+
         }
     }
 
@@ -296,28 +306,38 @@ public class Game extends JFrame implements KeyListener {
 
     private void blockCollision()
     {
-
-        //fly
-        if (checkCollision(p.x, p2.x, p.y, p2.y, sz, sz2)) {
-            GameState = GAME_STATES.SCORE;
-        }
-        //red
-        if (checkCollision(p.x, p4.x, p.y, p4.y, sz, sz4)&& points >=12) {
-            GameState = GAME_STATES.SCORE;
-        }
-        //fly2
-        if (checkCollision(p6.x, p.x, p6.y, p.y, sz6, sz)&& points >=22) {
-            GameState = GAME_STATES.SCORE;
-        }
-
-        //pink green
-        if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5)&&points>=17) {
+if(!invincible) {
+    //fly
+    if (checkCollision(p.x, p2.x, p.y, p2.y, sz, sz2)) {
+        GameState = GAME_STATES.SCORE;
+    }
+    //red
+    if (checkCollision(p.x, p4.x, p.y, p4.y, sz, sz4) && points >= 12) {
+        GameState = GAME_STATES.SCORE;
+    }
+    //fly2
+    if (checkCollision(p6.x, p.x, p6.y, p.y, sz6, sz) && points >= 22) {
         GameState = GAME_STATES.SCORE;
     }
 
-        if (checkCollision(p.x, p7.x, p.y, p7.y, sz, sz7)&&points>=7) {
-            GameState = GAME_STATES.SCORE;
-        }
+    //pink green
+    if (checkCollision(p.x, p5.x, p.y, p5.y, sz, sz5) && points >= 17) {
+        GameState = GAME_STATES.SCORE;
+    }
+
+    if (checkCollision(p.x, p7.x, p.y, p7.y, sz, sz7) && points >= 7) {
+        GameState = GAME_STATES.SCORE;
+    }
+
+
+    //checks if white and GReen blocks collide
+    if (checkCollision(p.x, p3.x, p.y, p3.y, sz, sz3)) {
+        points++;
+        coins++;
+        movePoints();
+
+    }
+}
         //checks if fly collides with white block
         if (checkCollision(p2.x, p3.x, p2.y, p3.y, sz2, sz3)) {
             movePoints();
@@ -325,14 +345,6 @@ public class Game extends JFrame implements KeyListener {
             sz2 += 30;
         }
 
-
-        //checks if white and GReen blocks collide
-        if (checkCollision(p.x, p3.x, p.y, p3.y, sz, sz3)) {
-            points++;
-            coins++;
-            movePoints();
-
-        }
 
         // White + red
         if (checkCollision(p4.x, p3.x, p4.y, p3.y, sz4, sz3)&& points>=11) {
@@ -358,7 +370,7 @@ public class Game extends JFrame implements KeyListener {
 
     private boolean checkCollision(float x, float x2, float y, float y2, int sz, int sz2) {
 
-        return x < x2 + sz2 &&
+           return x < x2 + sz2 &&
                 x + sz > x2 &&
                 y < y2 + sz2 &&
                 y + sz > y2;
@@ -390,16 +402,16 @@ public class Game extends JFrame implements KeyListener {
 
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                 g.setColor(Color.RED);
-                g.drawString("Press 1 to decrease size (5pts)", 20, 80);
+                g.drawString("Press 1 to decrease size (5 coins)", 20, 80);
 
                 g.setColor(Color.RED);
-                g.drawString("Press 2 to increase speed boost length (5pts)", 20, 160);
+                g.drawString("Press 2 to increase speed boost length (1 coin)", 20, 160);
 
                 g.setColor(Color.RED);
-                g.drawString("Press 3 to become invincible for 3 seconds (5pts)", 20, 240);
+                g.drawString("Press 3 to become invincible for 3 seconds (5 coins)", 20, 240);
 
                 g.setColor(Color.RED);
-                g.drawString("Press 4 to fire a harpoon at the shark (5pts)", 20, 320);
+                g.drawString("Press 4 to fire a harpoon at the shark (5 coins)", 20, 320);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
                 g.setColor(Color.BLACK);
                 g.drawString("Press ENTER to play", 50, 550);
@@ -412,11 +424,13 @@ public class Game extends JFrame implements KeyListener {
                 g.drawImage(background ,0,0 ,WIDTH,HEIGHT,null);
 
                 g.setColor(Color.GREEN);
-                g.drawRect(350,30 , 450,40 );
+               g.drawRect(350,30 ,cooldownMax ,35 );
+
+
 
 
                 g.setColor(Color.GREEN);
-                g.fillRect(350,30 , (cooldown*9)/2,40 );
+               g.fillRect(350,30 , cooldown,35 );
 
                 //player
                 if(!right) {
@@ -474,16 +488,12 @@ public class Game extends JFrame implements KeyListener {
               }
 
                if(points>=20) {
-                   Image eagleN = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\eagleng.gif");
-
-
-                   g.drawImage(eagleN, p6.ix, p6.iy, sz6, sz6, null);
+                   Image cth = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\cthulhund.png");
+                   g.drawImage(cth, p6.ix, p6.iy, sz6, sz6, null);
                     if(points>=22) {
                         //fly2
-                        Image eagle = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\eagle.gif");
-
-
-                        g.drawImage(eagle, p6.ix, p6.iy, sz6, sz6, null);
+                        Image cthnd = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\cthulhu.png");
+                        g.drawImage(cthnd, p6.ix, p6.iy, sz6, sz6, null);
                     }
 
                }
@@ -499,6 +509,8 @@ public class Game extends JFrame implements KeyListener {
                 g.drawString(("Points:"), 20, 65);
                 g.drawString(Long.toString(points), 60, 65);
                 //release resources, show the buffer
+                g.dispose();
+                strategy.show();
                 break;
             case SCORE:
                 g.clearRect(0, 0, WIDTH, HEIGHT);
@@ -583,16 +595,37 @@ public class Game extends JFrame implements KeyListener {
 
                             }
                             break;
-                        case KeyEvent.VK_Y:
+                        case KeyEvent.VK_1:
 
-                            if (coins >= 5&& sz >15) {
-                             sz-=10;
+                            if (coins >= 5&& sz >25) {
+                             sz-=20;
                             coins-=5;
                             }
 
                             break;
 
+                        case KeyEvent.VK_2:
 
+                            if (coins >= 1&&cooldownMax<=250) {
+                             cooldownMax+=25;
+                             coins-=1;
+                            }
+
+                            break;
+                        case KeyEvent.VK_3:
+
+                            if (coins >= 5) {
+                                invincible=true;
+                                coins-=5;
+                            }
+
+                            break;
+
+                        case KeyEvent.VK_4:
+
+                           //todo
+
+                            break;
                         case KeyEvent.VK_P:
                             points++;
                             coins++;
