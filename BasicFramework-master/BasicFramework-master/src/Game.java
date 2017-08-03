@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//todo  upgrade system(2 hours)
+//todo  harpoon/ fix collision
 public class Game extends JFrame implements KeyListener {
 
     //window vars
@@ -17,10 +17,10 @@ public class Game extends JFrame implements KeyListener {
     private final int WIDTH; //window width
     private final int HEIGHT; //window height
     public GAME_STATES GameState = GAME_STATES.MENU;
-    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7;
+    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7, v8,a8,p8;
    // final float T = 10f;
     float friction, push,time;
-    int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7,coolRate;
+    int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7,sz8x,sz8y,coolRate;
     int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c,coins,counter,counter2,cooldownMax,gCounter,iCounter;
     private boolean accelerating = false,right;
     private boolean spacePressed,invincible;
@@ -216,6 +216,11 @@ public class Game extends JFrame implements KeyListener {
                 v4.add(Vector.mult(a, dt));
                 p4.add(Vector.mult(v4, dt));
 
+                //spear
+                v8 = Vector.sub(p4, p8);
+                v8.setMag(75);
+                v8.add(Vector.mult(a4, dt));
+                p8.add(Vector.mult(v8, dt));
 
                 //[redicting ai
                 v5 = Vector.sub(p3,Vector.add(p5,Vector.mult(v,.25f)));
@@ -336,28 +341,39 @@ if(!invincible) {
         coins++;
         movePoints();
 
+
+
     }
 }
         //checks if fly collides with white block
         if (checkCollision(p2.x, p3.x, p2.y, p3.y, sz2, sz3)) {
             movePoints();
             points--;
-            sz2 += 30;
+            sz2 += 5;
         }
+
+
+        //harpoon / shark
+           if( p4.x < p8.x + sz8x &&
+                    p4.x + sz4 > p8.x &&
+                    p4.y < p8.y + sz8y &&
+                    p4.y + sz4 > p8.y){
+               //todo draw spear and test
+           }
 
 
         // White + red
         if (checkCollision(p4.x, p3.x, p4.y, p3.y, sz4, sz3)&& points>=11) {
             movePoints();
             points--;
-            sz4 += 30;
+            sz4 += 5;
         }
 
         // White + Pink
         if (checkCollision(p5.x, p3.x, p5.y, p3.y, sz5, sz3)&& points>=16) {
             movePoints();
             points--;
-            sz5 += 30 ;
+            sz5 += 5 ;
         }
 
 
@@ -433,11 +449,20 @@ if(!invincible) {
                g.fillRect(350,30 , cooldown,35 );
 
                 //player
-                if(!right) {
+                if(!right&& !invincible) {
                     Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter.png");
                     g.drawImage(heli, p.ix,p.iy,sz,sz,null);
-                }else{
+                }else if(right && !invincible){
                     Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter2.png");
+                    g.drawImage(heli, p.ix,p.iy,sz,sz,null);
+                }else if (!right && invincible){
+                    Image helii = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopteri.png");
+                    g.drawImage(helii, p.ix,p.iy,sz,sz,null);
+                }else if (right && invincible){
+                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter2i.png");
+                    g.drawImage(heli, p.ix,p.iy,sz,sz,null);
+                }else{
+                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter.png");
                     g.drawImage(heli, p.ix,p.iy,sz,sz,null);
                 }
 
@@ -623,7 +648,7 @@ if(!invincible) {
 
                         case KeyEvent.VK_4:
 
-                           //todo
+
 
                             break;
                         case KeyEvent.VK_P:
