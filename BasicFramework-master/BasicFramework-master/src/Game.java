@@ -17,13 +17,13 @@ public class Game extends JFrame implements KeyListener {
     private final int WIDTH; //window width
     private final int HEIGHT; //window height
     public GAME_STATES GameState = GAME_STATES.MENU;
-    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7, v8,a8,p8;
+    Vector p, a, a2, p2, v, v2, v4, a4, p3, p4, p5, v5, a5, p6, v6, a6, p7,v7, a7, v8,a8,p8,pMinus;
    // final float T = 10f;
     float friction, push,time;
     int sz, cooldown, sz2, sz3, sz4, sz5, sz6,sz7,sz8x,sz8y,coolRate;
     int randomNum = 1, randomNum2 = 1, points = 0, randomNum3 = 1, randomNum4 = 1, c,coins,counter,counter2,cooldownMax,gCounter,iCounter;
     private boolean accelerating = false,right;
-    private boolean spacePressed,invincible;
+    private boolean spacePressed,invincible, sharkDead,spear;
     //double buffer strategy
     private BufferStrategy strategy;
     private ArrayList<Integer> keys = new ArrayList<>();
@@ -84,6 +84,7 @@ public class Game extends JFrame implements KeyListener {
         p5 = new Vector(700, 30);
         p6 = new Vector(500, 100);
         p7 = new Vector(400, 500);
+        p8 = new Vector(1000, 1000);
 
 
         v = new Vector(0, 0);
@@ -92,7 +93,8 @@ public class Game extends JFrame implements KeyListener {
         v5 = new Vector(5, 5);
         v6 = new Vector(0, 0);
         v7 = new Vector(10, 10);
-
+        v8 = new Vector(0, 0);
+        pMinus = new Vector(0,10);
 
         friction = .99f;
         a = new Vector(0, 0);
@@ -101,6 +103,7 @@ public class Game extends JFrame implements KeyListener {
         a5 = new Vector(3, 3);
         a6 = new Vector(1, 1);
         a7 = new Vector(10, 10);
+        a8 = new Vector(0, 0);
 
         push = 100;
         cooldown = 10;
@@ -112,6 +115,9 @@ public class Game extends JFrame implements KeyListener {
         sz5 = 40;
         sz6 = 60;
         sz7 = 50;
+        sz8x=20;
+        sz8y=70;
+
         c= 0;
         coins=0;
         points=0;
@@ -121,7 +127,8 @@ public class Game extends JFrame implements KeyListener {
         invincible=false;
         time=0;
         gCounter=0;
-
+        sharkDead= false;
+        spear=false;
     }
 
     private BufferedImage createTexture(String path) {
@@ -189,6 +196,7 @@ public class Game extends JFrame implements KeyListener {
                     iCounter++;
                     if(iCounter>=180){
                         invincible=false;
+                        iCounter=0;
                     }
                 }
 
@@ -207,22 +215,24 @@ public class Game extends JFrame implements KeyListener {
                 p7.add(Vector.mult(v7, dt));
 
 
-
-
                 //following ai
-
-                v4 = Vector.sub(p, p4);
-                v4.setMag(75);
-                v4.add(Vector.mult(a, dt));
-                p4.add(Vector.mult(v4, dt));
-
+                if(!sharkDead) {
+                    v4 = Vector.sub(p, p4);
+                    v4.setMag(75);
+                    v4.add(Vector.mult(a, dt));
+                    p4.add(Vector.mult(v4, dt));
+                } else {
+                    v4.add(pMinus);
+                    p4.add(Vector.mult(v4, dt));
+                }
                 //spear
-                v8 = Vector.sub(p4, p8);
-                v8.setMag(75);
-                v8.add(Vector.mult(a4, dt));
-                p8.add(Vector.mult(v8, dt));
-
-                //[redicting ai
+               if(spear) {
+                   v8 = Vector.sub(p4, p8);
+                   v8.setMag(200);
+                   v8.add(Vector.mult(a4, dt));
+                   p8.add(Vector.mult(v8, dt));
+               }
+                //predicting ai
                 v5 = Vector.sub(p3,Vector.add(p5,Vector.mult(v,.25f)));
                 v5.setMag(25);
                 v5.add(Vector.mult(a5, dt));
@@ -252,14 +262,14 @@ public class Game extends JFrame implements KeyListener {
             v.setX(v.x * -1);
             a.setX(a.x * -1);
             a = new Vector(0, 0);
-            p.add(Vector.mult(v,dt));
+            p.add(Vector.mult(v,dt*3));
         }
 
         if (p.y + sz > HEIGHT  || p.y < 30) {
             v.setY(v.y * -1);
             a.setY(a.y * -1);
             a = new Vector(0, 0);
-            p.add(Vector.mult(v,dt));
+            p.add(Vector.mult(v,dt*3));
         }
 
 
@@ -290,6 +300,7 @@ public class Game extends JFrame implements KeyListener {
             a7 = new Vector(0, 0);
             p7.add(Vector.mult(v7,dt*3));
         }
+
 
         if (p6.x + sz6 > WIDTH  || p6.x <0) {
             v6.setX(v6.x * -1);
@@ -337,8 +348,8 @@ if(!invincible) {
 
     //checks if white and GReen blocks collide
     if (checkCollision(p.x, p3.x, p.y, p3.y, sz, sz3)) {
-        points++;
-        coins++;
+        points+=5;
+        coins+=5;
         movePoints();
 
 
@@ -358,17 +369,18 @@ if(!invincible) {
                     p4.x + sz4 > p8.x &&
                     p4.y < p8.y + sz8y &&
                     p4.y + sz4 > p8.y){
-               //todo draw spear and test
+               sharkDead=true;
+
            }
 
-
-        // White + red
-        if (checkCollision(p4.x, p3.x, p4.y, p3.y, sz4, sz3)&& points>=11) {
-            movePoints();
-            points--;
-            sz4 += 5;
+        if(!sharkDead) {
+            // White + red
+            if (checkCollision(p4.x, p3.x, p4.y, p3.y, sz4, sz3) && points >= 11) {
+                movePoints();
+                points--;
+                sz4 += 5;
+            }
         }
-
         // White + Pink
         if (checkCollision(p5.x, p3.x, p5.y, p3.y, sz5, sz3)&& points>=16) {
             movePoints();
@@ -427,7 +439,7 @@ if(!invincible) {
                 g.drawString("Press 3 to become invincible for 3 seconds (5 coins)", 20, 240);
 
                 g.setColor(Color.RED);
-                g.drawString("Press 4 to fire a harpoon at the shark (5 coins)", 20, 320);
+                g.drawString("Press 4 to fire a harpoon at the shark (50 coins)", 20, 320);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
                 g.setColor(Color.BLACK);
                 g.drawString("Press ENTER to play", 50, 550);
@@ -481,15 +493,19 @@ if(!invincible) {
 
 
 
-
-                if(points>=10) {
+                if(!sharkDead) {
+                    if (points >= 10) {
+                        Image helicopter = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3nd.png");
+                        g.drawImage(helicopter, p4.ix, p4.iy, sz4, sz4, null);
+                        if (points > 11) {
+                            //tracking
+                            Image helicopterR = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3.png");
+                            g.drawImage(helicopterR, p4.ix, p4.iy, sz4, sz4, null);
+                        }
+                    }
+                }else{
                     Image helicopter = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3nd.png");
                     g.drawImage(helicopter, p4.ix, p4.iy, sz4, sz4, null);
-                    if(points>11) {
-                        //tracking
-                        Image helicopterR = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3.png");
-                        g.drawImage(helicopterR, p4.ix, p4.iy, sz4, sz4, null);
-                    }
                 }
 
                 if(points>=5) {
@@ -520,6 +536,10 @@ if(!invincible) {
                         Image cthnd = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\cthulhu.png");
                         g.drawImage(cthnd, p6.ix, p6.iy, sz6, sz6, null);
                     }
+                if(spear) {
+                    Image spear = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\spear.png");
+                    g.drawImage(spear, p8.ix, p8.iy, sz8x, sz8y, null);
+                }
 
                }
 
@@ -647,13 +667,16 @@ if(!invincible) {
                             break;
 
                         case KeyEvent.VK_4:
-
+                            if (coins>=50){
+                                spear=true;
+                                coins-=50;
+                            }
 
 
                             break;
                         case KeyEvent.VK_P:
-                            points++;
-                            coins++;
+                            points+=50;
+                            coins+=50;
 
 
                             break;
