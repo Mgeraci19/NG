@@ -278,12 +278,14 @@ public class Game extends JFrame implements KeyListener {
             v2.setX(v2.x * -1);
             a2.setX(a2.x * -1);
             a2 = new Vector(0, 0);
+            p2.add(Vector.mult(v2,dt*3));
         }
 
         if (p2.y + sz2 > HEIGHT || p2.y < 500) {
 
             v2.setY(v2.y * -1);
             a2 = new Vector(0, 0);
+            p2.add(Vector.mult(v2,dt*3));
         }
         //wander
         if (p7.y + sz7 > HEIGHT || p7.y<25) {
@@ -405,8 +407,6 @@ if(!invincible) {
 
 
     }
-
-
     /*
      * draw()
      * gets the canvas (Graphics2D) and draws all elements
@@ -425,7 +425,7 @@ if(!invincible) {
 
 
 
-                Image backgroundF = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\background.png");
+                Image backgroundF = createTexture("Textures\\background.png");
                 g.drawImage(backgroundF ,0,0 ,WIDTH,HEIGHT,null);
 
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
@@ -439,16 +439,24 @@ if(!invincible) {
                 g.drawString("Press 3 to become invincible for 3 seconds (5 coins)", 20, 240);
 
                 g.setColor(Color.RED);
-                g.drawString("Press 4 to fire a harpoon at the shark (50 coins)", 20, 320);
+                g.drawString("Press 4 to fire a harpoon at the shark (15 coins)", 20, 320);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
                 g.setColor(Color.BLACK);
                 g.drawString("Press ENTER to play", 50, 550);
+
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+                g.setColor(Color.BLACK);
+                g.drawString("Use arrow keys to move", 700, 80);
+
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+                g.setColor(Color.BLACK);
+                g.drawString("Press space to increase acceleration", 700, 160);
 
                 break;
             case PLAY:
                 g.clearRect(0, 0, WIDTH, HEIGHT);
 
-                Image background = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\background.png");
+                Image background = createTexture("Textures\\background.png");
                 g.drawImage(background ,0,0 ,WIDTH,HEIGHT,null);
 
                 g.setColor(Color.GREEN);
@@ -462,31 +470,31 @@ if(!invincible) {
 
                 //player
                 if(!right&& !invincible) {
-                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter.png");
+                    Image heli = createTexture("Textures\\helicopter.png");
                     g.drawImage(heli, p.ix,p.iy,sz,sz,null);
                 }else if(right && !invincible){
-                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter2.png");
+                    Image heli = createTexture("Textures\\helicopter2.png");
                     g.drawImage(heli, p.ix,p.iy,sz,sz,null);
                 }else if (!right && invincible){
-                    Image helii = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopteri.png");
+                    Image helii = createTexture("Textures\\helicopteri.png");
                     g.drawImage(helii, p.ix,p.iy,sz,sz,null);
                 }else if (right && invincible){
-                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter2i.png");
+                    Image heli = createTexture("Textures\\helicopter2i.png");
                     g.drawImage(heli, p.ix,p.iy,sz,sz,null);
                 }else{
-                    Image heli = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter.png");
+                    Image heli = createTexture("Textures\\helicopter.png");
                     g.drawImage(heli, p.ix,p.iy,sz,sz,null);
                 }
 
 
 
                 //random
-                Image crab = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\crab.gif");
+                Image crab = loadTextureGif("Textures\\crab.gif");
 
 
                 g.drawImage(crab, p2.ix,p2.iy,sz2,sz2 ,null);
                 //points
-                Image sprite = loadTextureGif("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\spincoin.gif");
+                Image sprite = loadTextureGif("Textures\\spincoin.gif");
 
 
                 g.drawImage(sprite, p3.ix,p3.iy,sz3,sz3,null);
@@ -495,49 +503,49 @@ if(!invincible) {
 
                 if(!sharkDead) {
                     if (points >= 10) {
-                        Image helicopter = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3nd.png");
+                        Image helicopter = createTexture("Textures\\helicopter3nd.png");
                         g.drawImage(helicopter, p4.ix, p4.iy, sz4, sz4, null);
                         if (points > 11) {
                             //tracking
-                            Image helicopterR = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3.png");
+                            Image helicopterR = createTexture("Textures\\helicopter3.png");
                             g.drawImage(helicopterR, p4.ix, p4.iy, sz4, sz4, null);
                         }
                     }
                 }else{
-                    Image helicopter = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\helicopter3nd.png");
+                    Image helicopter = createTexture("Textures\\helicopter3nd.png");
                     g.drawImage(helicopter, p4.ix, p4.iy, sz4, sz4, null);
                 }
 
                 if(points>=5) {
-                    Image owlN = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\airballonng.png");
+                    Image owlN = createTexture("Textures\\airballonng.png");
                     g.drawImage(owlN, p7.ix, p7.iy, sz7, sz7, null);
                    if(points>= 7) {
                        //tracking
-                       Image owl = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\airballon.png");
+                       Image owl = createTexture("Textures\\airballon.png");
                        g.drawImage(owl, p7.ix, p7.iy, sz7, sz7, null);
                    }
                 }
 
               if(points>=15) {
-                  Image dragonN = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\dragonnd.png");
+                  Image dragonN = createTexture("Textures\\dragonnd.png");
                   g.drawImage(dragonN, p5.ix, p5.iy, sz5, sz5, null);
                     if(points>=17) {
                         //predicting
-                        Image dragon = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\dragon.png");
+                        Image dragon = createTexture("Textures\\dragon.png");
                         g.drawImage(dragon, p5.ix, p5.iy, sz5, sz5, null);
                     }
               }
 
                if(points>=20) {
-                   Image cth = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\cthulhund.png");
+                   Image cth = createTexture("Textures\\cthulhund.png");
                    g.drawImage(cth, p6.ix, p6.iy, sz6, sz6, null);
                     if(points>=22) {
                         //fly2
-                        Image cthnd = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\cthulhu.png");
+                        Image cthnd = createTexture("Textures\\cthulhu.png");
                         g.drawImage(cthnd, p6.ix, p6.iy, sz6, sz6, null);
                     }
                 if(spear) {
-                    Image spear = createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\spear.png");
+                    Image spear = createTexture("Textures\\spear.png");
                     g.drawImage(spear, p8.ix, p8.iy, sz8x, sz8y, null);
                 }
 
@@ -564,7 +572,7 @@ if(!invincible) {
 
 
 
-                g.drawImage(createTexture("C:\\Users\\IGMAdmin\\Desktop\\NG\\BasicFramework-master\\BasicFramework-master\\Textures\\game over.png"), 0, 0, WIDTH, HEIGHT, null);
+                g.drawImage(createTexture("Textures\\game over.png"), 0, 0, WIDTH, HEIGHT, null);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
 
                if (counter%40==0) {
@@ -667,9 +675,9 @@ if(!invincible) {
                             break;
 
                         case KeyEvent.VK_4:
-                            if (coins>=50){
+                            if (coins>=15){
                                 spear=true;
-                                coins-=50;
+                                coins-=15;
                             }
 
 
