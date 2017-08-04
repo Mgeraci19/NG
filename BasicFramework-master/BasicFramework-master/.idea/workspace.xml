@@ -16,7 +16,7 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
+            <state relative-caret-position="-1986">
               <caret line="450" column="62" lean-forward="false" selection-start-line="450" selection-start-column="62" selection-end-line="450" selection-end-column="62" />
               <folding>
                 <element signature="method#Game#0;class#Game#0" expanded="false" />
@@ -410,7 +410,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -830,7 +830,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
+        <state relative-caret-position="-1986">
           <caret line="450" column="62" lean-forward="false" selection-start-line="450" selection-start-column="62" selection-end-line="450" selection-end-column="62" />
           <folding>
             <element signature="method#Game#0;class#Game#0" expanded="false" />
